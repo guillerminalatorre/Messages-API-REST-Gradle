@@ -1,0 +1,220 @@
+Index: .idea/modules/Messages-API-REST-Gradle.iml
+===================================================================
+diff --git a/.idea/modules/Messages-API-REST-Gradle.iml b/.idea/modules/Messages-API-REST-Gradle.iml
+deleted file mode 100644
+--- a/.idea/modules/Messages-API-REST-Gradle.iml	(revision 7247501d60d982dbd0c51023e9ea36ef314195e8)
++++ /dev/null	(revision 7247501d60d982dbd0c51023e9ea36ef314195e8)
+@@ -1,8 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<module type="JAVA_MODULE" version="4">
+-  <component name="NewModuleRootManager" inherit-compiler-output="true">
+-    <exclude-output />
+-    <content url="file://$MODULE_DIR$/../.." />
+-    <orderEntry type="sourceFolder" forTests="false" />
+-  </component>
+-</module>
+\ No newline at end of file
+Index: .gradle/buildOutputCleanup/cache.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#Thu May 13 14:51:56 ART 2021\r\ngradle.version=6.8\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.gradle/buildOutputCleanup/cache.properties b/.gradle/buildOutputCleanup/cache.properties
+--- a/.gradle/buildOutputCleanup/cache.properties	(revision 7247501d60d982dbd0c51023e9ea36ef314195e8)
++++ b/.gradle/buildOutputCleanup/cache.properties	(date 1620928535407)
+@@ -1,2 +1,2 @@
+-#Thu May 13 14:51:56 ART 2021
+-gradle.version=6.8
++#Thu May 13 14:55:35 ART 2021
++gradle.version=6.8.3
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_1_6\" project-jdk-name=\"11\" project-jdk-type=\"JavaSDK\" />\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 7247501d60d982dbd0c51023e9ea36ef314195e8)
++++ b/.idea/misc.xml	(date 1620928537460)
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="ExternalStorageConfigurationManager" enabled="true" />
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" project-jdk-name="11" project-jdk-type="JavaSDK" />
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
+ </project>
+\ No newline at end of file
+Index: src/test/java/course/springframeworkguru/messagesapirestg/MessagesApiRestGApplicationTests.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/course/springframeworkguru/messagesapirestg/MessagesApiRestGApplicationTests.java b/src/test/java/course/springframeworkguru/messagesapirestg/MessagesApiRestGApplicationTests.java
+new file mode 100644
+--- /dev/null	(date 1620928500487)
++++ b/src/test/java/course/springframeworkguru/messagesapirestg/MessagesApiRestGApplicationTests.java	(date 1620928500487)
+@@ -0,0 +1,13 @@
++package course.springframeworkguru.messagesapirestg;
++
++import org.junit.jupiter.api.Test;
++import org.springframework.boot.test.context.SpringBootTest;
++
++@SpringBootTest
++class MessagesApiRestGApplicationTests {
++
++	@Test
++	void contextLoads() {
++	}
++
++}
+Index: src/main/java/course/springframeworkguru/messagesapirestg/MessagesApiRestGApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/course/springframeworkguru/messagesapirestg/MessagesApiRestGApplication.java b/src/main/java/course/springframeworkguru/messagesapirestg/MessagesApiRestGApplication.java
+new file mode 100644
+--- /dev/null	(date 1620928500483)
++++ b/src/main/java/course/springframeworkguru/messagesapirestg/MessagesApiRestGApplication.java	(date 1620928500483)
+@@ -0,0 +1,13 @@
++package course.springframeworkguru.messagesapirestg;
++
++import org.springframework.boot.SpringApplication;
++import org.springframework.boot.autoconfigure.SpringBootApplication;
++
++@SpringBootApplication
++public class MessagesApiRestGApplication {
++
++	public static void main(String[] args) {
++		SpringApplication.run(MessagesApiRestGApplication.class, args);
++	}
++
++}
+Index: src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+new file mode 100644
+--- /dev/null	(date 1620928500484)
++++ b/src/main/resources/application.properties	(date 1620928500484)
+@@ -0,0 +1,1 @@
++
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build.gradle b/build.gradle
+new file mode 100644
+--- /dev/null	(date 1620928554398)
++++ b/build.gradle	(date 1620928554398)
+@@ -0,0 +1,27 @@
++plugins {
++	id 'org.springframework.boot' version '2.4.5'
++	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
++	id 'java'
++}
++
++group = 'course.springframeworkguru'
++version = '0.0.1-SNAPSHOT'
++sourceCompatibility = '11'
++
++repositories {
++	mavenCentral()
++}
++
++dependencies {
++	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
++	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
++	implementation 'org.springframework.boot:spring-boot-starter-web'
++	implementation 'org.springframework.session:spring-session-core'
++    implementation 'org.projectlombok:lombok:1.18.18'
++    runtimeOnly 'org.postgresql:postgresql'
++	testImplementation 'org.springframework.boot:spring-boot-starter-test'
++}
++
++test {
++	useJUnitPlatform()
++}
+Index: .gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+--- /dev/null	(date 1620928500479)
++++ b/.gitignore	(date 1620928500479)
+@@ -0,0 +1,37 @@
++HELP.md
++.gradle
++build/
++!gradle/wrapper/gradle-wrapper.jar
++!**/src/main/**/build/
++!**/src/test/**/build/
++
++### STS ###
++.apt_generated
++.classpath
++.factorypath
++.project
++.settings
++.springBeans
++.sts4-cache
++bin/
++!**/src/main/**/bin/
++!**/src/test/**/bin/
++
++### IntelliJ IDEA ###
++.idea
++*.iws
++*.iml
++*.ipr
++out/
++!**/src/main/**/out/
++!**/src/test/**/out/
++
++### NetBeans ###
++/nbproject/private/
++/nbbuild/
++/dist/
++/nbdist/
++/.nb-gradle/
++
++### VS Code ###
++.vscode/
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"CompilerConfiguration\">\r\n    <bytecodeTargetLevel target=\"1.6\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+--- a/.idea/compiler.xml	(revision 7247501d60d982dbd0c51023e9ea36ef314195e8)
++++ b/.idea/compiler.xml	(date 1620928537475)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="CompilerConfiguration">
+-    <bytecodeTargetLevel target="1.6" />
++    <bytecodeTargetLevel target="11" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: settings.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/settings.gradle b/settings.gradle
+new file mode 100644
+--- /dev/null	(date 1620928500481)
++++ b/settings.gradle	(date 1620928500481)
+@@ -0,0 +1,1 @@
++rootProject.name = 'messages-api-rest-g'
