@@ -1,0 +1,28 @@
+course/springframeworkguru/messagesapirestg/MessagesApiRestGApplication.java
+ course.springframeworkguru.messagesapirestg.MessagesApiRestGApplication
+course/springframeworkguru/messagesapirestg/models/BaseEntity.java
+ course.springframeworkguru.messagesapirestg.models.BaseEntity
+course/springframeworkguru/messagesapirestg/models/employeesAPI/City.java
+ course.springframeworkguru.messagesapirestg.models.employeesAPI.City
+course/springframeworkguru/messagesapirestg/models/User.java
+ course.springframeworkguru.messagesapirestg.models.User
+course/springframeworkguru/messagesapirestg/models/employeesAPI/State.java
+ course.springframeworkguru.messagesapirestg.models.employeesAPI.State
+course/springframeworkguru/messagesapirestg/models/Message.java
+ course.springframeworkguru.messagesapirestg.models.Message
+course/springframeworkguru/messagesapirestg/models/employeesAPI/Employee.java
+ course.springframeworkguru.messagesapirestg.models.employeesAPI.Employee
+course/springframeworkguru/messagesapirestg/models/Attachment.java
+ course.springframeworkguru.messagesapirestg.models.Attachment
+course/springframeworkguru/messagesapirestg/models/employeesAPI/Country.java
+ course.springframeworkguru.messagesapirestg.models.employeesAPI.Country
+course/springframeworkguru/messagesapirestg/models/Label.java
+ course.springframeworkguru.messagesapirestg.models.Label
+course/springframeworkguru/messagesapirestg/models/Recipients.java
+ course.springframeworkguru.messagesapirestg.models.Recipients
+course/springframeworkguru/messagesapirestg/models/LabelXMessage.java
+ course.springframeworkguru.messagesapirestg.models.LabelXMessage
+course/springframeworkguru/messagesapirestg/models/RecipientType.java
+ course.springframeworkguru.messagesapirestg.models.RecipientType
+course/springframeworkguru/messagesapirestg/models/LabelXUser.java
+ course.springframeworkguru.messagesapirestg.models.LabelXUser
