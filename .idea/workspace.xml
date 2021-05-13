@@ -5,18 +5,72 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5e40aa13-6b4f-4c46-b5de-ba667568fdd1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/course/springframeworkguru/messagesapirestg/MessagesApiRestGApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/course/springframeworkguru/messagesapirestg/MessagesApiRestGApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8.3/executionHistory/executionHistory.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8.3/executionHistory/executionHistory.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8.3/fileChanges/last-build.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8.3/fileHashes/fileHashes.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8.3/fileHashes/fileHashes.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8.3/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8.3/gc.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8.3/javaCompile/classAnalysis.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8.3/javaCompile/jarAnalysis.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8.3/javaCompile/javaCompile.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8.3/javaCompile/taskHistory.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8/executionHistory/executionHistory.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8/executionHistory/executionHistory.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8/fileChanges/last-build.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8/fileHashes/fileHashes.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8/fileHashes/fileHashes.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/6.8/gc.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/configuration-cache/gc.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/vcs-1/gc.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries-with-intellij-classes.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HELP.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/course/springframeworkguru/messagesapirestg/MessagesApiRestGApplication.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/course/springframeworkguru/messagesapirestg/models/Attachment.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/course/springframeworkguru/messagesapirestg/models/BaseEntity.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/course/springframeworkguru/messagesapirestg/models/Label.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/course/springframeworkguru/messagesapirestg/models/LabelXMessage.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/course/springframeworkguru/messagesapirestg/models/LabelXUser.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/course/springframeworkguru/messagesapirestg/models/Message.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/course/springframeworkguru/messagesapirestg/models/RecipientType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/course/springframeworkguru/messagesapirestg/models/Recipients.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/course/springframeworkguru/messagesapirestg/models/User.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/course/springframeworkguru/messagesapirestg/models/employeesAPI/City.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/course/springframeworkguru/messagesapirestg/models/employeesAPI/Country.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/course/springframeworkguru/messagesapirestg/models/employeesAPI/Employee.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/course/springframeworkguru/messagesapirestg/models/employeesAPI/State.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/test/course/springframeworkguru/messagesapirestg/MessagesApiRestGApplicationTests.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/resources/main/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/tmp/compileTestJava/source-classes-mapping.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/course/springframeworkguru/messagesapirestg/models/Attachment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/course/springframeworkguru/messagesapirestg/models/BaseEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/course/springframeworkguru/messagesapirestg/models/Label.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/course/springframeworkguru/messagesapirestg/models/LabelXUser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/course/springframeworkguru/messagesapirestg/models/Message.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/course/springframeworkguru/messagesapirestg/models/RecipientType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/course/springframeworkguru/messagesapirestg/models/Recipients.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/course/springframeworkguru/messagesapirestg/models/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/course/springframeworkguru/messagesapirestg/models/employeesAPI/City.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/course/springframeworkguru/messagesapirestg/models/employeesAPI/Country.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/course/springframeworkguru/messagesapirestg/models/employeesAPI/Employee.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/course/springframeworkguru/messagesapirestg/models/employeesAPI/State.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/Messages-API-REST-Gradle.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_5_2021_14_57__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_5_2021_14_57__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

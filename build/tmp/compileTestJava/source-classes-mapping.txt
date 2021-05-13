@@ -1,0 +1,2 @@
+course/springframeworkguru/messagesapirestg/MessagesApiRestGApplicationTests.java
+ course.springframeworkguru.messagesapirestg.MessagesApiRestGApplicationTests
