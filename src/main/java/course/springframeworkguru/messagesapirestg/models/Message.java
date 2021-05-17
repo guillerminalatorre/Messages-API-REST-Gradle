@@ -17,15 +17,15 @@ public class Message  implements Serializable {
     @Id
     @Column(name = "id_message")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int id;
+    private int id;
 
     @Column(name = "subject")
-    public String subject;
+    private String subject;
 
     @Column(name = "body")
-    public String body;
+    private String body;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user_from", foreignKey = @ForeignKey(name="FK_USER_FROM"))
-    public User userFrom;
+    private User userFrom;
 }

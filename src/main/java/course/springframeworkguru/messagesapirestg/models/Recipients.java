@@ -15,21 +15,21 @@ import java.io.Serializable;
 public class Recipients implements Serializable {
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user",
             foreignKey = @ForeignKey(name="FK_USER_RECIPIENT"))
     @PrimaryKeyJoinColumn(name = "id_user",referencedColumnName="id_user")
     private User user;
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_message",
             foreignKey = @ForeignKey(name="FK_MESSAGE_RECIPIENT"))
     @PrimaryKeyJoinColumn(name = "id_message",referencedColumnName="id_message")
     private Message message;
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_recipient_type",
             foreignKey = @ForeignKey(name="FK_TYPE_RECIPIENT"))
     @PrimaryKeyJoinColumn(name = "id_recipient_type",referencedColumnName="id_recipient_type")
