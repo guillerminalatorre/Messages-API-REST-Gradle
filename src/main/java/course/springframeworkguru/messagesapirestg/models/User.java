@@ -1,5 +1,6 @@
 package course.springframeworkguru.messagesapirestg.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import course.springframeworkguru.messagesapirestg.models.employees.Employee;
 
 import lombok.*;
@@ -24,6 +25,7 @@ public class User  implements Serializable {
     @Column(name = "username")
     private String username;
 
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 

@@ -1,5 +1,7 @@
 package course.springframeworkguru.messagesapirestg.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,5 +24,8 @@ public class Label  implements Serializable {
 
     @Column(name= "name")
     private String name;
+
+    @Column(name = "is_default")
+    private boolean isDefault;
 
 }

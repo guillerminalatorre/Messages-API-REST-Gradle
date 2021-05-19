@@ -1,9 +1,12 @@
 package course.springframeworkguru.messagesapirestg.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,4 +31,8 @@ public class Message  implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user_from", foreignKey = @ForeignKey(name="FK_USER_FROM"))
     private User userFrom;
+
+    @OneToMany(mappedBy = "message")
+    @JsonManagedReference
+    private List<Recipient> recipientList;
 }

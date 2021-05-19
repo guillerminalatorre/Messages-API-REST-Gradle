@@ -1,62 +1,89 @@
 course/springframeworkguru/messagesapirestg/models/employees/Country.java
  course.springframeworkguru.messagesapirestg.models.employees.Country
  course.springframeworkguru.messagesapirestg.models.employees.Country$CountryBuilder
-course/springframeworkguru/messagesapirestg/models/Label.java
- course.springframeworkguru.messagesapirestg.models.Label
- course.springframeworkguru.messagesapirestg.models.Label$LabelBuilder
+course/springframeworkguru/messagesapirestg/services/MessageService.java
+ course.springframeworkguru.messagesapirestg.services.MessageService
 course/springframeworkguru/messagesapirestg/exceptions/GenericException.java
  course.springframeworkguru.messagesapirestg.exceptions.GenericException
 course/springframeworkguru/messagesapirestg/models/employees/City.java
  course.springframeworkguru.messagesapirestg.models.employees.City
  course.springframeworkguru.messagesapirestg.models.employees.City$CityBuilder
-course/springframeworkguru/messagesapirestg/models/employees/Employee.java
- course.springframeworkguru.messagesapirestg.models.employees.Employee
- course.springframeworkguru.messagesapirestg.models.employees.Employee$EmployeeBuilder
-course/springframeworkguru/messagesapirestg/models/LabelXUser.java
- course.springframeworkguru.messagesapirestg.models.LabelXUser
- course.springframeworkguru.messagesapirestg.models.LabelXUser$LabelXUserBuilder
-course/springframeworkguru/messagesapirestg/services/UserService.java
- course.springframeworkguru.messagesapirestg.services.UserService
-course/springframeworkguru/messagesapirestg/utils/Hash.java
- course.springframeworkguru.messagesapirestg.utils.Hash
-course/springframeworkguru/messagesapirestg/services/MessageService.java
- course.springframeworkguru.messagesapirestg.services.MessageService
-course/springframeworkguru/messagesapirestg/models/employees/State.java
- course.springframeworkguru.messagesapirestg.models.employees.State
- course.springframeworkguru.messagesapirestg.models.employees.State$StateBuilder
-course/springframeworkguru/messagesapirestg/repositories/UserRepository.java
- course.springframeworkguru.messagesapirestg.repositories.UserRepository
+course/springframeworkguru/messagesapirestg/models/LabelDefaultXMessage.java
+ course.springframeworkguru.messagesapirestg.models.LabelDefaultXMessage
+ course.springframeworkguru.messagesapirestg.models.LabelDefaultXMessage$LabelDefaultXMessageBuilder
+course/springframeworkguru/messagesapirestg/controllers/UserController.java
+ course.springframeworkguru.messagesapirestg.controllers.UserController
 course/springframeworkguru/messagesapirestg/repositories/EmployeeRepository.java
  course.springframeworkguru.messagesapirestg.repositories.EmployeeRepository
 course/springframeworkguru/messagesapirestg/MessagesApiRestGApplication.java
  course.springframeworkguru.messagesapirestg.MessagesApiRestGApplication
 course/springframeworkguru/messagesapirestg/controllers/IndexController.java
  course.springframeworkguru.messagesapirestg.controllers.IndexController
-course/springframeworkguru/messagesapirestg/models/User.java
- course.springframeworkguru.messagesapirestg.models.User
- course.springframeworkguru.messagesapirestg.models.User$UserBuilder
-course/springframeworkguru/messagesapirestg/dto/LoginDto.java
- course.springframeworkguru.messagesapirestg.dto.LoginDto
-course/springframeworkguru/messagesapirestg/controllers/UserController.java
- course.springframeworkguru.messagesapirestg.controllers.UserController
-course/springframeworkguru/messagesapirestg/models/RecipientType.java
- course.springframeworkguru.messagesapirestg.models.RecipientType
- course.springframeworkguru.messagesapirestg.models.RecipientType$RecipientTypeBuilder
-course/springframeworkguru/messagesapirestg/dto/NewUserDto.java
- course.springframeworkguru.messagesapirestg.dto.NewUserDto
-course/springframeworkguru/messagesapirestg/models/Recipients.java
- course.springframeworkguru.messagesapirestg.models.Recipients
- course.springframeworkguru.messagesapirestg.models.Recipients$RecipientsBuilder
+course/springframeworkguru/messagesapirestg/dto/LabelDto.java
+ course.springframeworkguru.messagesapirestg.dto.LabelDto
+course/springframeworkguru/messagesapirestg/models/LabelUserXMessage.java
+ course.springframeworkguru.messagesapirestg.models.LabelUserXMessage
+ course.springframeworkguru.messagesapirestg.models.LabelUserXMessage$LabelUserXMessageBuilder
 course/springframeworkguru/messagesapirestg/repositories/MessageRepository.java
  course.springframeworkguru.messagesapirestg.repositories.MessageRepository
-course/springframeworkguru/messagesapirestg/models/LebelXMessage.java
- course.springframeworkguru.messagesapirestg.models.LebelXMessage
- course.springframeworkguru.messagesapirestg.models.LebelXMessage$LebelXMessageBuilder
+course/springframeworkguru/messagesapirestg/models/Recipient.java
+ course.springframeworkguru.messagesapirestg.models.Recipient
+ course.springframeworkguru.messagesapirestg.models.Recipient$RecipientBuilder
 course/springframeworkguru/messagesapirestg/models/Message.java
  course.springframeworkguru.messagesapirestg.models.Message
  course.springframeworkguru.messagesapirestg.models.Message$MessageBuilder
+course/springframeworkguru/messagesapirestg/repositories/LabelUserXMessageRepository.java
+ course.springframeworkguru.messagesapirestg.repositories.LabelUserXMessageRepository
+course/springframeworkguru/messagesapirestg/services/UserService.java
+ course.springframeworkguru.messagesapirestg.services.UserService
 course/springframeworkguru/messagesapirestg/models/Attachment.java
  course.springframeworkguru.messagesapirestg.models.Attachment
  course.springframeworkguru.messagesapirestg.models.Attachment$AttachmentBuilder
+course/springframeworkguru/messagesapirestg/dto/RecipientDto.java
+ course.springframeworkguru.messagesapirestg.dto.RecipientDto
+course/springframeworkguru/messagesapirestg/dto/NewUserDto.java
+ course.springframeworkguru.messagesapirestg.dto.NewUserDto
+course/springframeworkguru/messagesapirestg/models/RecipientType.java
+ course.springframeworkguru.messagesapirestg.models.RecipientType
+ course.springframeworkguru.messagesapirestg.models.RecipientType$RecipientTypeBuilder
+course/springframeworkguru/messagesapirestg/models/LabelUser.java
+ course.springframeworkguru.messagesapirestg.models.LabelUser
+ course.springframeworkguru.messagesapirestg.models.LabelUser$LabelUserBuilder
+course/springframeworkguru/messagesapirestg/repositories/RecipientRepository.java
+ course.springframeworkguru.messagesapirestg.repositories.RecipientRepository
+course/springframeworkguru/messagesapirestg/repositories/RecipientTypeRepository.java
+ course.springframeworkguru.messagesapirestg.repositories.RecipientTypeRepository
+course/springframeworkguru/messagesapirestg/repositories/LabelRepository.java
+ course.springframeworkguru.messagesapirestg.repositories.LabelRepository
+course/springframeworkguru/messagesapirestg/models/Label.java
+ course.springframeworkguru.messagesapirestg.models.Label
+ course.springframeworkguru.messagesapirestg.models.Label$LabelBuilder
+course/springframeworkguru/messagesapirestg/models/employees/Employee.java
+ course.springframeworkguru.messagesapirestg.models.employees.Employee
+ course.springframeworkguru.messagesapirestg.models.employees.Employee$EmployeeBuilder
+course/springframeworkguru/messagesapirestg/dto/HttpMessageDto.java
+ course.springframeworkguru.messagesapirestg.dto.HttpMessageDto
+course/springframeworkguru/messagesapirestg/repositories/LabelDefaultXMessageRepository.java
+ course.springframeworkguru.messagesapirestg.repositories.LabelDefaultXMessageRepository
+course/springframeworkguru/messagesapirestg/utils/Hash.java
+ course.springframeworkguru.messagesapirestg.utils.Hash
+course/springframeworkguru/messagesapirestg/models/employees/State.java
+ course.springframeworkguru.messagesapirestg.models.employees.State
+ course.springframeworkguru.messagesapirestg.models.employees.State$StateBuilder
+course/springframeworkguru/messagesapirestg/dto/MessageDto.java
+ course.springframeworkguru.messagesapirestg.dto.MessageDto
+course/springframeworkguru/messagesapirestg/models/User.java
+ course.springframeworkguru.messagesapirestg.models.User
+ course.springframeworkguru.messagesapirestg.models.User$UserBuilder
+course/springframeworkguru/messagesapirestg/repositories/UserRepository.java
+ course.springframeworkguru.messagesapirestg.repositories.UserRepository
+course/springframeworkguru/messagesapirestg/dto/LoginDto.java
+ course.springframeworkguru.messagesapirestg.dto.LoginDto
+course/springframeworkguru/messagesapirestg/dto/NewLabelDto.java
+ course.springframeworkguru.messagesapirestg.dto.NewLabelDto
+course/springframeworkguru/messagesapirestg/repositories/LabelUserRepository.java
+ course.springframeworkguru.messagesapirestg.repositories.LabelUserRepository
+course/springframeworkguru/messagesapirestg/services/LabelXMessageService.java
+ course.springframeworkguru.messagesapirestg.services.LabelXMessageService
 course/springframeworkguru/messagesapirestg/controllers/MessageController.java
  course.springframeworkguru.messagesapirestg.controllers.MessageController
