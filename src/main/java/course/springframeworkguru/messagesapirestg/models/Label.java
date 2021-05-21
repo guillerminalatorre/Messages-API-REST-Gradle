@@ -25,7 +25,13 @@ public class Label  implements Serializable {
     @Column(name= "name")
     private String name;
 
-    @Column(name = "is_default")
-    private boolean isDefault;
+    @Column(name = "enabled", columnDefinition = "boolean default true")
+    private boolean isEnabled;
+
+    @ManyToOne
+    @JoinColumn(name = "id_user",
+            foreignKey = @ForeignKey(name="FK_USER_LABEL"))
+    @JsonIgnore
+    private User user;
 
 }

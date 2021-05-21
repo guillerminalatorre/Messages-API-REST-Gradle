@@ -8,5 +8,8 @@ import java.util.List;
 
 @Repository
 public interface LabelRepository extends JpaRepository<Label,Integer> {
-    List<Label> findByIsDefaultTrue();
+
+    List<Label> findByIsEnabledTrueAndUserIdOrUserId(int id, Integer id2);
+
+    Label findByIdAndIsEnabledTrue(int id);
 }

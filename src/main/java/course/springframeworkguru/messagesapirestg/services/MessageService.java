@@ -1,19 +1,17 @@
 package course.springframeworkguru.messagesapirestg.services;
 
-import course.springframeworkguru.messagesapirestg.dto.HttpMessageDto;
-import course.springframeworkguru.messagesapirestg.dto.MessageDto;
-import course.springframeworkguru.messagesapirestg.dto.RecipientDto;
-import course.springframeworkguru.messagesapirestg.models.Label;
+import course.springframeworkguru.messagesapirestg.dto.output.MessageDto;
+import course.springframeworkguru.messagesapirestg.dto.output.RecipientDto;
+import course.springframeworkguru.messagesapirestg.exceptions.MessageException;
+import course.springframeworkguru.messagesapirestg.exceptions.RecipientException;
+import course.springframeworkguru.messagesapirestg.models.Attachment;
 import course.springframeworkguru.messagesapirestg.models.Message;
 import course.springframeworkguru.messagesapirestg.models.Recipient;
 import course.springframeworkguru.messagesapirestg.models.User;
-import course.springframeworkguru.messagesapirestg.repositories.MessageRepository;
-import course.springframeworkguru.messagesapirestg.repositories.RecipientRepository;
-import course.springframeworkguru.messagesapirestg.repositories.RecipientTypeRepository;
-import course.springframeworkguru.messagesapirestg.repositories.UserRepository;
+import course.springframeworkguru.messagesapirestg.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,38 +24,44 @@ public class MessageService {
     private final UserRepository userRepository;
     private final RecipientTypeRepository recipientTypeRepository;
     private final RecipientRepository recipientRepository;
+    private final AttachmentRepository attachmentRepository;
+    private final LabelRepository labelRepository;
 
     @Autowired
-    public MessageService(MessageRepository messageRepository, UserRepository userRepository, RecipientTypeRepository recipientTypeRepository, RecipientRepository recipientRepository) {
+    public MessageService(MessageRepository messageRepository,
+                          UserRepository userRepository,
+                          RecipientTypeRepository recipientTypeRepository,
+                          RecipientRepository recipientRepository,
+                          AttachmentRepository attachmentRepository, LabelRepository labelRepository){
+
         this.messageRepository = messageRepository;
         this.userRepository = userRepository;
         this.recipientTypeRepository = recipientTypeRepository;
         this.recipientRepository = recipientRepository;
+        this.attachmentRepository = attachmentRepository;
+        this.labelRepository = labelRepository;
     }
 
-    public ResponseEntity findByUserFromId (int id){
+    public Page<Message> findByUserFromId (int id, Pageable pageable){
 
-        List<Message> messages = this.messageRepository.findByUserFromId(id);
-
-        if( !messages.isEmpty()){
-
-            return new ResponseEntity(messages, HttpStatus.OK);
-        }
-        else return new  ResponseEntity(HttpStatus.NOT_FOUND);
+        return this.messageRepository.findByUserFromId(id, pageable);
     }
 
-    public ResponseEntity findByRecipientId (int id){
+    public Page<Message> findByRecipientId (int id, Pageable pageable){
 
-        List<Message> messages = this.messageRepository.findByRecipientListUserId(id);
+        return this.messageRepository.findByRecipientListUserId(id, pageable);
+    }
+    public Page<Message> findByRecipientIdAndLabel (int idUser, int idLabel, Pageable pageable){
 
-        if( !messages.isEmpty()){
-
-            return new ResponseEntity(messages, HttpStatus.OK);
-        }
-        else return new  ResponseEntity(HttpStatus.NOT_FOUND);
+        return this.messageRepository.findByRecipientListUserIdAndLabelXMessageListUserIdAndLabelXMessageListLabelIdAndLabelXMessageListLabelIsEnabledTrue(idUser, idUser, idLabel, pageable);
     }
 
-    public ResponseEntity send(MessageDto messageDto) {
+    public Page<Message> findByUserFromIdAndLabel (int idUser, int idLabel, Pageable pageable){
+
+        return this.messageRepository.findByUserFromIdAndLabelXMessageListUserIdAndLabelXMessageListLabelIdAndLabelXMessageListLabelIsEnabledTrue(idUser, idUser, idLabel, pageable);
+    }
+
+    public Message send(MessageDto messageDto) throws MessageException, RecipientException {
 
         Message message = new Message();
 
@@ -65,24 +69,30 @@ public class MessageService {
         message.setSubject(messageDto.getSubject());
 
         User userFrom = this.userRepository
-                .findByEmployeeMailUsername(messageDto.getMailUsernameFrom());
+                .findByEmployeeMailUsernameAndIsEnabledTrue(messageDto.getMailUsernameFrom());
 
         message.setUserFrom(userFrom);
 
-        if(this.messageRepository.save(message) != null) return this.saveRecipients(messageDto.getRecipients(), message);
+        if((this.messageRepository.save(message)) != null) {
 
-        else return new ResponseEntity(new HttpMessageDto("Message not sent",HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()),HttpStatus.INTERNAL_SERVER_ERROR);
+            this.saveAttachments(messageDto.getAttachments(), message);
+
+            return this.saveRecipients(messageDto.getRecipients(), message);
+        }
+
+        else throw new MessageException("Message Error", "New Message wasn't saved");
 
     }
 
-    private ResponseEntity saveRecipients(List<RecipientDto> recipientsDto, Message message){
+    private Message saveRecipients(List<RecipientDto> recipientsDto, Message message) throws RecipientException {
+
         List<Recipient> recipients = new ArrayList<Recipient>();
 
         StringBuilder statusRecipients = new StringBuilder("Couldn't sent mail to: ");
 
         for (RecipientDto recipientDto: recipientsDto) {
 
-            User user = this.userRepository.findByEmployeeMailUsername(recipientDto.getMailUsername());
+            User user = this.userRepository.findByEmployeeMailUsernameAndIsEnabledTrue(recipientDto.getMailUsername());
 
             if(user != null) {
 
@@ -105,16 +115,36 @@ public class MessageService {
 
         if(!recipients.isEmpty()) this.recipientRepository.saveAll(recipients);
 
+
+
         if ( statusRecipients.toString().equals("Couldn't sent mail to: ") ){
 
-            return new ResponseEntity(HttpStatus.OK);
+            return message;
         }
         else {
             statusRecipients.append(". Message sent to valid recipients.");
 
-            return new ResponseEntity(new HttpMessageDto("Invalid Recipient", statusRecipients.toString()),HttpStatus.OK);
+            throw new RecipientException("Invalid Recipient", statusRecipients.toString());
         }
     }
 
+    private void saveAttachments(String[] attachments, Message message) throws RecipientException {
 
+        if(attachments.length > 0){
+
+            List<Attachment> attachmentsList = new ArrayList<Attachment>();
+
+            for (String attachment: attachments) {
+
+                Attachment attach = new Attachment();
+
+                attach.setAttachment(attachment);
+                attach.setMessage(message);
+
+                attachmentsList.add(attach);
+            }
+
+            this.attachmentRepository.saveAll(attachmentsList);
+        }
+    }
 }

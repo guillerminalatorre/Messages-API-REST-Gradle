@@ -1,11 +1,19 @@
 package course.springframeworkguru.messagesapirestg.controllers;
 
-import course.springframeworkguru.messagesapirestg.dto.LoginDto;
-import course.springframeworkguru.messagesapirestg.dto.NewUserDto;
+import course.springframeworkguru.messagesapirestg.dto.HttpMessageDto;
+import course.springframeworkguru.messagesapirestg.dto.output.LoginDto;
+import course.springframeworkguru.messagesapirestg.dto.input.NewUserDto;
+import course.springframeworkguru.messagesapirestg.exceptions.UserException;
+import course.springframeworkguru.messagesapirestg.models.User;
 import course.springframeworkguru.messagesapirestg.services.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
 
 @Controller
 @RequestMapping("/users")
@@ -19,45 +27,110 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginDto loginDto){
+    public ResponseEntity login(@RequestBody LoginDto loginDto) {
 
-        return this.userService.login(loginDto);
+        try {
+            User user = this.userService.login(loginDto);
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(user.getId())
+                    .toUri();
+
+            return ResponseEntity.created(location).build();
+        }
+        catch(UserException userException) {
+            return new ResponseEntity(new HttpMessageDto(userException.getMessage(), userException.getDetails()), HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @PostMapping("/")
-    public ResponseEntity save(@RequestBody NewUserDto newUserDto){
+    public ResponseEntity singIn(@RequestBody NewUserDto newUserDto){
 
-        return this.userService.save(newUserDto);
+        try {
+            User user = this.userService.save(newUserDto);
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(user.getId())
+                    .toUri();
+
+            return ResponseEntity.created(location).build();
+        }
+        catch(UserException userException) {
+            return new ResponseEntity(new HttpMessageDto(userException.getMessage(), userException.getDetails()), HttpStatus.UNAUTHORIZED);
+        }
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity update(@RequestBody NewUserDto newUserDto){
 
-        return this.userService.update(newUserDto);
+        try {
+            User user = this.userService.update(newUserDto);
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(user.getId())
+                    .toUri();
+
+            return ResponseEntity.created(location).build();
+        }
+        catch(UserException userException) {
+            return new ResponseEntity(new HttpMessageDto(userException.getMessage(), userException.getDetails()), HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @PostMapping("/{id}/admin={status}")
-    public ResponseEntity makeAdmin(@PathVariable int id, @PathVariable boolean status){
+    @PutMapping("/{id}/admin")
+    public ResponseEntity makeAdmin(@PathVariable int id, @RequestParam("status") boolean status){
+        try {
+            User user = this.userService.changeAdminStatus(id, status);
 
-        return this.userService.changeAdminStatus(id, status);
-    }
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(user.getId())
+                    .toUri();
 
-    @GetMapping("/id/{id}")
-    public ResponseEntity findById(@PathVariable int id){
-
-        return this.userService.findById(id);
+            return ResponseEntity.created(location).build();
+        }
+        catch(UserException userException) {
+            return new ResponseEntity(new HttpMessageDto(userException.getMessage(), userException.getDetails()), HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @GetMapping("/mailUsername/{mailUsername}")
-    public ResponseEntity findByMailUsername(@PathVariable String mailUsername){
+    public ResponseEntity findByMailUsernameLike(@PathVariable String mailUsername){
 
-        return this.userService.findByMailUsername(mailUsername);
+        List<User> users = this.userService.findByMailUsernameLike(mailUsername);
+
+        if (users != null) return new ResponseEntity(users, HttpStatus.OK);
+
+        else return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/")
     public ResponseEntity findAll(){
 
-        return this.userService.findAll();
+        List<User> users = this.userService.findAll();
+
+        if (users != null) return new ResponseEntity(users, HttpStatus.OK);
+
+        else return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @DeleteMapping("/")
+    public ResponseEntity deleteUser(@RequestParam("user") int idUser){
+
+        try{
+            User user = this.userService.delete(idUser);
+
+            return new ResponseEntity(HttpStatus.OK);
+
+        }catch (UserException userException){
+            return new ResponseEntity(new HttpMessageDto(userException.getMessage(), userException.getDetails()), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

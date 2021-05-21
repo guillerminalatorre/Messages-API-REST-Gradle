@@ -1,20 +1,16 @@
 package course.springframeworkguru.messagesapirestg.services;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import course.springframeworkguru.messagesapirestg.dto.LoginDto;
-import course.springframeworkguru.messagesapirestg.dto.NewUserDto;
+import course.springframeworkguru.messagesapirestg.dto.output.LoginDto;
+import course.springframeworkguru.messagesapirestg.dto.input.NewUserDto;
+import course.springframeworkguru.messagesapirestg.exceptions.UserException;
 import course.springframeworkguru.messagesapirestg.models.User;
 import course.springframeworkguru.messagesapirestg.models.employees.Employee;
 import course.springframeworkguru.messagesapirestg.repositories.EmployeeRepository;
 import course.springframeworkguru.messagesapirestg.repositories.UserRepository;
 import course.springframeworkguru.messagesapirestg.utils.Hash;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
 import java.util.List;
 
 @Service
@@ -29,62 +25,30 @@ public class UserService {
         this.employeeRepository = employeeRepository;
     }
 
-    public ResponseEntity login(LoginDto loginDto){
+    public User login(LoginDto loginDto) throws UserException {
 
-        User user = userRepository.findByEmployeeMailUsername(loginDto.getMailUsername());
+        User user = userRepository.findByEmployeeMailUsernameAndIsEnabledTrue(loginDto.getMailUsername());
 
         if(user != null){
 
             if( (Hash.getHash(loginDto.getPassword())).equals( user.getPassword() )){
 
-                return new ResponseEntity("User loged : " + user.getUsername(), HttpStatus.OK);
+                return user;
             }
-            else return new  ResponseEntity("Wrong password ", HttpStatus.BAD_REQUEST);
+            else throw new UserException("Login error", "Invalid password");
 
         }
-        else return new  ResponseEntity("No one User mail username is : " + loginDto.getMailUsername(), HttpStatus.NOT_FOUND);
+        else throw new UserException("Login error", "No one User mail username is : " + loginDto.getMailUsername());
 
     }
 
-    public ResponseEntity findById(int id){
-
-        User user = userRepository.findById(id);
-
-        if(user != null){
-
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-            String json = gson.toJson(user);
-
-            return new ResponseEntity(json, HttpStatus.OK);
-
-        }
-        else return new  ResponseEntity("User doesn't exist", HttpStatus.NOT_FOUND);
-    }
-
-    public ResponseEntity findByMailUsername(String username){
-
-        User user = userRepository.findByEmployeeMailUsername(username);
-
-        if(user != null){
-
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-            String json = gson.toJson(user);
-
-            return new ResponseEntity(json, HttpStatus.OK);
-
-        }
-        else return new  ResponseEntity("No one User username is : " + username, HttpStatus.NOT_FOUND);
-    }
-
-    public ResponseEntity save (NewUserDto newUserDto){
+    public User save (NewUserDto newUserDto) throws UserException {
 
         Employee employee = this.employeeRepository.findByMailUsername( newUserDto.getMailUsername());
 
         if( employee != null ){
 
-            if(this.userRepository.findByEmployeeMailUsername(newUserDto.getMailUsername()) == null) {
+            if(this.userRepository.findByEmployeeMailUsernameAndIsEnabledTrue(newUserDto.getMailUsername()) == null) {
 
                 User user = new User();
 
@@ -95,22 +59,20 @@ public class UserService {
 
                 this.userRepository.save(user);
 
-                return new ResponseEntity(HttpStatus.CREATED);
+                return user;
             }
-            else return new  ResponseEntity("Employee already is an User", HttpStatus.CONFLICT);
+            else throw new UserException("Sing in error", "Employee already is an User" + newUserDto.getMailUsername());
         }
-        else return new  ResponseEntity("Mail Username isn't valid", HttpStatus.NOT_FOUND);
+        else throw new UserException("Sing in error", "No one Employee mail username is : " + newUserDto.getMailUsername());
     }
 
-    public ResponseEntity update(NewUserDto newUserDto){
-
-        System.out.println(newUserDto.toString());
+    public User update(NewUserDto newUserDto) throws UserException {
 
         Employee employee = this.employeeRepository.findByMailUsername( newUserDto.getMailUsername());
 
         if( employee != null ){
 
-            User user = this.userRepository.findByEmployeeMailUsername(newUserDto.getMailUsername());
+            User user = this.userRepository.findByEmployeeMailUsernameAndIsEnabledTrue(newUserDto.getMailUsername());
 
             user.setEmployee(employee);
             user.setUsername(newUserDto.getUsername());
@@ -118,14 +80,14 @@ public class UserService {
 
             this.userRepository.save(user);
 
-            return new ResponseEntity(HttpStatus.OK);
+            return user;
         }
-        else return new  ResponseEntity("Mail Username isn't valid", HttpStatus.NOT_FOUND);
+        else throw new UserException("Update User Error", "No one Employee mail username is : " + newUserDto.getMailUsername());
     }
 
-    public ResponseEntity changeAdminStatus(int id, boolean status) {
+    public User changeAdminStatus(int id, boolean status) throws UserException {
 
-        User user = this.userRepository.findById(id);
+        User user = this.userRepository.findByIdAndIsEnabledTrue(id);
 
         if( user != null ){
 
@@ -133,24 +95,34 @@ public class UserService {
 
             this.userRepository.save(user);
 
-            return new ResponseEntity(HttpStatus.OK);
+            return user;
         }
-        else return new  ResponseEntity("User id isn't valid", HttpStatus.NOT_FOUND);
+        else  throw new UserException("Update User Error", "Invalid User Id");
     }
 
-    public ResponseEntity findAll() {
+    public List<User> findByMailUsernameLike(String username){
 
-        List<User> users = this.userRepository.findAll();
+        return this.userRepository.findByEmployeeMailUsernameLikeAndIsEnabledTrue("%"+username+"%");
+    }
 
-        if( !users.isEmpty()){
+    public List<User> findAll() {
 
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return this.userRepository.findByIsEnabledTrue();
+    }
 
-            String json = gson.toJson(users);
+    public User delete (int idUser) throws UserException {
 
-            return new ResponseEntity(json, HttpStatus.OK);
+        User user = this.userRepository.findByIdAndIsEnabledTrue(idUser);
+
+        if( user != null ){
+
+            user.setEnabled(false);
+
+            this.userRepository.save(user);
+
+            return user;
         }
-        else return new  ResponseEntity(HttpStatus.NOT_FOUND);
+        else throw new UserException("Delete User Error", "Invalid User Id");
     }
 }
 

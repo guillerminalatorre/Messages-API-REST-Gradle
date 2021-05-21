@@ -1,13 +1,10 @@
 package course.springframeworkguru.messagesapirestg.services;
 
-import course.springframeworkguru.messagesapirestg.dto.HttpMessageDto;
-import course.springframeworkguru.messagesapirestg.dto.LabelDto;
-import course.springframeworkguru.messagesapirestg.dto.NewLabelDto;
+import course.springframeworkguru.messagesapirestg.dto.output.LabelDto;
+import course.springframeworkguru.messagesapirestg.dto.input.NewLabelDto;
+import course.springframeworkguru.messagesapirestg.exceptions.LabelException;
 import course.springframeworkguru.messagesapirestg.models.*;
 import course.springframeworkguru.messagesapirestg.repositories.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,125 +13,114 @@ import java.util.List;
 @Service
 public class LabelXMessageService {
 
-    private final LabelDefaultXMessageRepository labelDefaultXMessageRepository;
-    private final LabelUserXMessageRepository labelUserXMessageRepository;
-    private final LabelRepository labelRepository;
-    private final LabelUserRepository labelUserRepository;
-    private final UserRepository userRepository;
 
-    @Autowired
-    public LabelXMessageService(LabelDefaultXMessageRepository labelDefaultXMessageRepository,
-                                LabelUserXMessageRepository labelUserXMessageRepository,
-                                LabelRepository labelRepository, LabelUserRepository labelUserRepository, UserRepository userRepository) {
-        this.labelDefaultXMessageRepository = labelDefaultXMessageRepository;
-        this.labelUserXMessageRepository = labelUserXMessageRepository;
+    private final LabelXMessageRepository labelXMessageRepository;
+    private final LabelRepository labelRepository;
+    private final UserRepository userRepository;
+    private final MessageRepository messageRepository;
+
+    public LabelXMessageService(LabelXMessageRepository labelXMessageRepository,
+                                LabelRepository labelRepository,
+                                UserRepository userRepository,
+                                MessageRepository messageRepository) {
+        this.labelXMessageRepository = labelXMessageRepository;
         this.labelRepository = labelRepository;
-        this.labelUserRepository = labelUserRepository;
         this.userRepository = userRepository;
+        this.messageRepository = messageRepository;
     }
 
-    public ResponseEntity findLabelsByMessageId(int idMessage, int idUser) {
 
-        List<LabelDefaultXMessage> labelsDefault = this.labelDefaultXMessageRepository.findByMessageIdAndUserId(idMessage, idUser);
+    public List<LabelDto> findLabelsByMessageIdAndUserId(int idMessage, int idUser) {
 
-        List<LabelUserXMessage> labelsUsers = this.labelUserXMessageRepository.findByMessageIdAndLabelUserUserId(idMessage, idUser);
+        List<LabelXMessage> labelsMessage= this.labelXMessageRepository.findByMessageIdAndUserIdAndLabelIsEnabledTrue(idMessage, idUser);
 
-        if (!labelsUsers.isEmpty() && !labelsDefault.isEmpty()) {
+        if (!labelsMessage.isEmpty()) {
 
             List<LabelDto> labels = new ArrayList<LabelDto>();
 
-            if (!labelsUsers.isEmpty()) {
+            if (!labelsMessage.isEmpty()) {
 
-                for (LabelUserXMessage labelUserXMessage : labelsUsers) {
+                for (LabelXMessage labelXMessage : labelsMessage) {
 
                     LabelDto label = new LabelDto();
 
-                    label.setIdMessage(labelUserXMessage.getMessage().getId());
-                    label.setName(labelUserXMessage.getLabelUser().getLabel().getName());
+                    label.setIdLabel(labelXMessage .getLabel().getId());
+                    label.setName(labelXMessage .getLabel().getName());
 
                     labels.add(label);
                 }
             }
+            return labels;
 
-            if (!labelsDefault.isEmpty()) {
-
-                for (LabelDefaultXMessage labelDefaultXMessage : labelsDefault) {
-
-                    LabelDto label = new LabelDto();
-
-                    label.setIdMessage(labelDefaultXMessage.getMessage().getId());
-                    label.setName(labelDefaultXMessage.getLabel().getName());
-
-                    labels.add(label);
-                }
-            }
-
-            return new ResponseEntity(labels, HttpStatus.OK);
-
-        } else return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } else return null;
 
     }
+    public List<LabelDto> findLabelsByUser(int id){
 
-    public ResponseEntity findLabelsDefault(){
-
-        List<Label> labels =  this.labelRepository.findByIsDefaultTrue();
+        List<Label> labels =  this.labelRepository.findByIsEnabledTrueAndUserIdOrUserId(id, null);
 
         if (!labels.isEmpty()) {
 
-            return new ResponseEntity(labels, HttpStatus.OK);
+            List<LabelDto> labelsDefault = new ArrayList<LabelDto>();
 
-        } else return new ResponseEntity(HttpStatus.NOT_FOUND);
+            for (Label label : labels) {
 
-    }
+                LabelDto aux = new LabelDto();
 
-    public ResponseEntity findLabelsUserByUserId(int idUser){
+                aux.setIdLabel(label.getId());
+                aux.setName(label.getName());
 
-        List<LabelUser> labelUserXMessages =  this.labelUserRepository.findByUserId(idUser);
-
-        if (!labelUserXMessages.isEmpty()) {
-
-            List<NewLabelDto> labels = new ArrayList<NewLabelDto>();
-
-            for (LabelUser labelUser : labelUserXMessages) {
-
-                NewLabelDto label = new NewLabelDto();
-
-                label.setName(labelUser.getLabel().getName());
-
-                labels.add(label);
+                labelsDefault.add(aux);
             }
 
-            return new ResponseEntity(labels, HttpStatus.OK);
+            return labelsDefault;
 
-        } else return new ResponseEntity(HttpStatus.NOT_FOUND);
-
+        } else return null;
     }
 
-    public ResponseEntity saveLabel(NewLabelDto nameLabel, int id) {
+    public Label saveNewLabel(NewLabelDto nameLabel, int idUser) {
+
+        User user = this.userRepository.findByIdAndIsEnabledTrue(idUser);
 
         Label label = new Label();
 
         label.setName(nameLabel.getName());
-        label.setDefault(false);
+        label.setUser(user);
 
-        if(this.labelRepository.save(label) != null) return this.saveLabelUser(label, id);
-
-        else return new ResponseEntity(new HttpMessageDto("Label not saved",HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()),HttpStatus.INTERNAL_SERVER_ERROR);
+        return this.labelRepository.save(label);
 
     }
 
-    private ResponseEntity saveLabelUser(Label label, int idUser){
+    public LabelXMessage assignLabelToMessage(int idMessage, int idLabel, int idUser){
 
-        User user = this.userRepository.findById(idUser);
+        Label label = this.labelRepository.findByIdAndIsEnabledTrue(idLabel);
 
-        LabelUser labelUser = new LabelUser();
+        User user = this.userRepository.findByIdAndIsEnabledTrue(idUser);
 
-        labelUser.setLabel(label);
-        labelUser.setUser(user);
+        Message message = this.messageRepository.findById(idMessage);
 
-        if(this.labelUserRepository.save(labelUser) != null) return new ResponseEntity(HttpStatus.OK);
+        LabelXMessage labelXMessage = new LabelXMessage();
 
-        else return new ResponseEntity(new HttpMessageDto("Label not saved",HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()),HttpStatus.INTERNAL_SERVER_ERROR);
+        labelXMessage.setMessage(message);
+        labelXMessage.setLabel(label);
+        labelXMessage.setUser(user);
+
+        return this.labelXMessageRepository.save(labelXMessage);
+    }
+
+    public Label delete (int idLabel) throws LabelException {
+
+        Label label = this.labelRepository.findByIdAndIsEnabledTrue(idLabel);
+
+        if( label != null ){
+
+            label.setEnabled(false);
+
+            this.labelRepository.save(label);
+
+            return label;
+        }
+        else throw new LabelException("Delete Label Error", "Invalid Label Id");
     }
 
 }

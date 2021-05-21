@@ -9,12 +9,14 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>{
 
-    User findById(int id);
+    User findByIdAndIsEnabledTrue(int id);
 
-    User findByEmployeeMailUsername(String username);
+    User findByEmployeeMailUsernameAndIsEnabledTrue(String username);
+
+    List<User> findByEmployeeMailUsernameLikeAndIsEnabledTrue(String username);
 
     User save(User user);
 
-    List<User> findAll();
+    List<User> findByIsEnabledTrue();
 
 }

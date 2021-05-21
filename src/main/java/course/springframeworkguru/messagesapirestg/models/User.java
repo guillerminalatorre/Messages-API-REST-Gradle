@@ -32,8 +32,11 @@ public class User  implements Serializable {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
+    @Column(name = "enabled", columnDefinition = "boolean default true")
+    private boolean isEnabled;
+
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_employee", foreignKey = @ForeignKey(name="FK_EMPLOYEE_USER"))
+    @JoinColumn(name = "id_employee", foreignKey = @ForeignKey(name="FK_EMPLOYEE_USER"), unique = true)
     private Employee employee;
 
 }
