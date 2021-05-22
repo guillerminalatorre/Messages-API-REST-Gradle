@@ -3,6 +3,7 @@ package course.springframeworkguru.messagesapirestg.services;
 import course.springframeworkguru.messagesapirestg.dto.output.LabelDto;
 import course.springframeworkguru.messagesapirestg.dto.input.NewLabelDto;
 import course.springframeworkguru.messagesapirestg.exceptions.LabelException;
+import course.springframeworkguru.messagesapirestg.exceptions.MessageException;
 import course.springframeworkguru.messagesapirestg.models.*;
 import course.springframeworkguru.messagesapirestg.repositories.*;
 import org.springframework.stereotype.Service;
@@ -78,24 +79,27 @@ public class LabelXMessageService {
         } else return null;
     }
 
-    public Label saveNewLabel(NewLabelDto nameLabel, int idUser) {
-
-        User user = this.userRepository.findByIdAndIsEnabledTrue(idUser);
+    public Label saveNewLabel(NewLabelDto nameLabel, User user) throws LabelException {
 
         Label label = new Label();
 
         label.setName(nameLabel.getName());
         label.setUser(user);
 
-        return this.labelRepository.save(label);
+        Label newLabel = this.labelRepository.save(label);
+
+        if(newLabel != null) {
+
+            return newLabel;
+        }
+
+        else throw new LabelException("Label Error", "New Label wasn't saved");
 
     }
 
-    public LabelXMessage assignLabelToMessage(int idMessage, int idLabel, int idUser){
+    public LabelXMessage assignLabelToMessage(int idMessage, int idLabel, User user) throws LabelException {
 
         Label label = this.labelRepository.findByIdAndIsEnabledTrue(idLabel);
-
-        User user = this.userRepository.findByIdAndIsEnabledTrue(idUser);
 
         Message message = this.messageRepository.findById(idMessage);
 
@@ -105,7 +109,14 @@ public class LabelXMessageService {
         labelXMessage.setLabel(label);
         labelXMessage.setUser(user);
 
-        return this.labelXMessageRepository.save(labelXMessage);
+        LabelXMessage newLabelXMessage = this.labelXMessageRepository.save(labelXMessage);
+
+        if(newLabelXMessage != null) {
+
+            return newLabelXMessage;
+        }
+
+        else throw new LabelException("Label Error", "Label wasn't assigned to Message");
     }
 
     public Label delete (int idLabel) throws LabelException {

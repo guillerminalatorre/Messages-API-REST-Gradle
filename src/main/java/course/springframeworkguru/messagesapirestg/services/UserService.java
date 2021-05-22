@@ -1,6 +1,6 @@
 package course.springframeworkguru.messagesapirestg.services;
 
-import course.springframeworkguru.messagesapirestg.dto.output.LoginDto;
+import course.springframeworkguru.messagesapirestg.dto.input.LoginDto;
 import course.springframeworkguru.messagesapirestg.dto.input.NewUserDto;
 import course.springframeworkguru.messagesapirestg.exceptions.UserException;
 import course.springframeworkguru.messagesapirestg.models.User;
@@ -31,7 +31,7 @@ public class UserService {
 
         if(user != null){
 
-            if( (Hash.getHash(loginDto.getPassword())).equals( user.getPassword() )){
+            if( loginDto.getPassword().equals( user.getPassword() )){
 
                 return user;
             }
@@ -89,7 +89,7 @@ public class UserService {
 
         User user = this.userRepository.findByIdAndIsEnabledTrue(id);
 
-        if( user != null ){
+        if( user != null && user.isEnabled() == true){
 
             user.setAdmin(status);
 
@@ -124,6 +124,7 @@ public class UserService {
         }
         else throw new UserException("Delete User Error", "Invalid User Id");
     }
+
 }
 
 

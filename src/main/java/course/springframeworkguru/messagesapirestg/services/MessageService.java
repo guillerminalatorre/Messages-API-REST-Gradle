@@ -1,6 +1,6 @@
 package course.springframeworkguru.messagesapirestg.services;
 
-import course.springframeworkguru.messagesapirestg.dto.output.MessageDto;
+import course.springframeworkguru.messagesapirestg.dto.input.MessageDto;
 import course.springframeworkguru.messagesapirestg.dto.output.RecipientDto;
 import course.springframeworkguru.messagesapirestg.exceptions.MessageException;
 import course.springframeworkguru.messagesapirestg.exceptions.RecipientException;
@@ -61,15 +61,12 @@ public class MessageService {
         return this.messageRepository.findByUserFromIdAndLabelXMessageListUserIdAndLabelXMessageListLabelIdAndLabelXMessageListLabelIsEnabledTrue(idUser, idUser, idLabel, pageable);
     }
 
-    public Message send(MessageDto messageDto) throws MessageException, RecipientException {
+    public Message send(MessageDto messageDto, User userFrom) throws MessageException, RecipientException {
 
         Message message = new Message();
 
         message.setBody(messageDto.getBody());
         message.setSubject(messageDto.getSubject());
-
-        User userFrom = this.userRepository
-                .findByEmployeeMailUsernameAndIsEnabledTrue(messageDto.getMailUsernameFrom());
 
         message.setUserFrom(userFrom);
 

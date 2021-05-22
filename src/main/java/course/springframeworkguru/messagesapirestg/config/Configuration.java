@@ -13,13 +13,17 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class Configuration {
 
+    private final SessionFilter sessionFilter;
+    private final AdminSessionFilter adminSessionFilter;
+
     @Autowired
-    SessionFilter sessionFilter;
-    @Autowired
-    AdminSessionFilter adminSessionFilter;
+    public Configuration(SessionFilter sessionFilter, AdminSessionFilter adminSessionFilter) {
+        this.sessionFilter = sessionFilter;
+        this.adminSessionFilter = adminSessionFilter;
+    }
 
     @Bean
-    public FilterRegistrationBean clientFilter() {
+    public FilterRegistrationBean userFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(sessionFilter);
         registration.addUrlPatterns("/api/*");
@@ -27,10 +31,10 @@ public class Configuration {
     }
 
     @Bean
-    public FilterRegistrationBean backofficeFilter() {
+    public FilterRegistrationBean adminFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(adminSessionFilter);
-        registration.addUrlPatterns("/backoffice/*");
+        registration.addUrlPatterns("/admin/*","/api/*");
         return registration;
     }
 }

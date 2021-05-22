@@ -1,5 +1,6 @@
-package course.springframeworkguru.messagesapirestg.dto.output;
+package course.springframeworkguru.messagesapirestg.dto.input;
 
+import course.springframeworkguru.messagesapirestg.dto.output.RecipientDto;
 import lombok.Data;
 
 import java.util.List;
@@ -9,7 +10,6 @@ public class MessageDto {
 
     private String subject;
     private String body;
-    private String mailUsernameFrom;
     private List<RecipientDto> recipients;
     private String[] attachments;
 }
