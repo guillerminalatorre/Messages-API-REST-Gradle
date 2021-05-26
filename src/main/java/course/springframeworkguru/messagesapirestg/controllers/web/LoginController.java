@@ -77,7 +77,7 @@ public class LoginController {
         }
     }
 
-    @PostMapping("/logout")
+    @DeleteMapping("/logout")
     public ResponseEntity logout(@RequestHeader("Authorization") String token) {
         sessionManager.removeSession(token);
         return ResponseEntity.ok().build();

@@ -89,8 +89,8 @@ course/springframeworkguru/messagesapirestg/views/LabelView.java
  course.springframeworkguru.messagesapirestg.views.LabelView
 course/springframeworkguru/messagesapirestg/repositories/RecipientTypeRepository.java
  course.springframeworkguru.messagesapirestg.repositories.RecipientTypeRepository
-course/springframeworkguru/messagesapirestg/controllers/web/LoginController.java
- course.springframeworkguru.messagesapirestg.controllers.web.LoginController
+course/springframeworkguru/messagesapirestg/repositories/RecipientRepository.java
+ course.springframeworkguru.messagesapirestg.repositories.RecipientRepository
 course/springframeworkguru/messagesapirestg/views/RecipientView.java
  course.springframeworkguru.messagesapirestg.views.RecipientView
 course/springframeworkguru/messagesapirestg/views/MessageSentView.java
@@ -121,7 +121,7 @@ course/springframeworkguru/messagesapirestg/controllers/LabelController.java
 course/springframeworkguru/messagesapirestg/models/Attachment.java
  course.springframeworkguru.messagesapirestg.models.Attachment
  course.springframeworkguru.messagesapirestg.models.Attachment$AttachmentBuilder
-course/springframeworkguru/messagesapirestg/repositories/RecipientRepository.java
- course.springframeworkguru.messagesapirestg.repositories.RecipientRepository
+course/springframeworkguru/messagesapirestg/controllers/web/LoginController.java
+ course.springframeworkguru.messagesapirestg.controllers.web.LoginController
 course/springframeworkguru/messagesapirestg/controllers/web/AdminController.java
  course.springframeworkguru.messagesapirestg.controllers.web.AdminController
