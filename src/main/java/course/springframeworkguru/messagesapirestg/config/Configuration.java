@@ -34,7 +34,7 @@ public class Configuration {
     public FilterRegistrationBean adminFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(adminSessionFilter);
-        registration.addUrlPatterns("/admin/*","/api/*");
+        registration.addUrlPatterns("/admin/*");
         return registration;
     }
 }

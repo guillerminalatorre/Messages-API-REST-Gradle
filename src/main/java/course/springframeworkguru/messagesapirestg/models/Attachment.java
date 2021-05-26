@@ -1,6 +1,7 @@
 package course.springframeworkguru.messagesapirestg.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,5 +27,6 @@ public class Attachment  implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_message", foreignKey = @ForeignKey(name="FK_MESSAGE_ATTACHMENT"))
     @JsonBackReference
+    @JsonIgnore
     private Message message;
 }

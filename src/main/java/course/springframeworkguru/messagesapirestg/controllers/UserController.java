@@ -1,20 +1,16 @@
 package course.springframeworkguru.messagesapirestg.controllers;
 
-import course.springframeworkguru.messagesapirestg.dto.HttpMessageDto;
-import course.springframeworkguru.messagesapirestg.dto.input.LoginDto;
-import course.springframeworkguru.messagesapirestg.dto.input.NewUserDto;
+import course.springframeworkguru.messagesapirestg.dto.LoginDto;
+import course.springframeworkguru.messagesapirestg.dto.NewUserDto;
 import course.springframeworkguru.messagesapirestg.exceptions.LoginException;
 import course.springframeworkguru.messagesapirestg.exceptions.UserException;
 import course.springframeworkguru.messagesapirestg.models.User;
 import course.springframeworkguru.messagesapirestg.services.UserService;
 import course.springframeworkguru.messagesapirestg.session.SessionManager;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import course.springframeworkguru.messagesapirestg.views.UserView;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,12 +55,12 @@ public class UserController {
     }
 
 
-    public List<User> findByMailUsernameLike(String mailUsername){
+    public List<UserView> findByMailUsernameLike(String mailUsername){
 
         return this.userService.findByMailUsernameLike(mailUsername);
     }
 
-    public List<User> findAll(){
+    public List<UserView> findAll(){
 
         return this.userService.findAll();
     }
@@ -73,23 +69,4 @@ public class UserController {
 
         return this.userService.delete(idUser);
     }
-
-    /*@PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginDto loginDto) {
-
-        try {
-            User user = this.userService.login(loginDto);
-
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(user.getId())
-                    .toUri();
-
-            return ResponseEntity.created(location).build();
-        }
-        catch(UserException userException) {
-            return new ResponseEntity(new HttpMessageDto(userException.getMessage(), userException.getDetails()), HttpStatus.UNAUTHORIZED);
-        }
-    }*/
 }

@@ -1,11 +1,12 @@
 package course.springframeworkguru.messagesapirestg.services;
 
-import course.springframeworkguru.messagesapirestg.dto.output.LabelDto;
-import course.springframeworkguru.messagesapirestg.dto.input.NewLabelDto;
+import course.springframeworkguru.messagesapirestg.dto.LabelDto;
+import course.springframeworkguru.messagesapirestg.dto.NewLabelDto;
 import course.springframeworkguru.messagesapirestg.exceptions.LabelException;
-import course.springframeworkguru.messagesapirestg.exceptions.MessageException;
 import course.springframeworkguru.messagesapirestg.models.*;
 import course.springframeworkguru.messagesapirestg.repositories.*;
+import course.springframeworkguru.messagesapirestg.views.LabelView;
+import course.springframeworkguru.messagesapirestg.views.LabelXMessageView;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,52 +32,17 @@ public class LabelXMessageService {
     }
 
 
-    public List<LabelDto> findLabelsByMessageIdAndUserId(int idMessage, int idUser) {
+    public List<LabelXMessageView> findLabelsByMessageIdAndUserId(int idMessage, int idUser) {
 
-        List<LabelXMessage> labelsMessage= this.labelXMessageRepository.findByMessageIdAndUserIdAndLabelIsEnabledTrue(idMessage, idUser);
+        List<LabelXMessageView> labels= this.labelXMessageRepository.findByMessageIdAndUserIdAndLabelIsEnabledTrue(idMessage, idUser);
 
-        if (!labelsMessage.isEmpty()) {
-
-            List<LabelDto> labels = new ArrayList<LabelDto>();
-
-            if (!labelsMessage.isEmpty()) {
-
-                for (LabelXMessage labelXMessage : labelsMessage) {
-
-                    LabelDto label = new LabelDto();
-
-                    label.setIdLabel(labelXMessage .getLabel().getId());
-                    label.setName(labelXMessage .getLabel().getName());
-
-                    labels.add(label);
-                }
-            }
-            return labels;
-
-        } else return null;
-
+        return labels;
     }
-    public List<LabelDto> findLabelsByUser(int id){
+    public List<LabelView> findLabelsByUser(int id){
 
-        List<Label> labels =  this.labelRepository.findByIsEnabledTrueAndUserIdOrUserId(id, null);
+        List<LabelView> labels =  this.labelRepository.findByIsEnabledTrueAndUserIdOrUserId(id, null);
 
-        if (!labels.isEmpty()) {
-
-            List<LabelDto> labelsDefault = new ArrayList<LabelDto>();
-
-            for (Label label : labels) {
-
-                LabelDto aux = new LabelDto();
-
-                aux.setIdLabel(label.getId());
-                aux.setName(label.getName());
-
-                labelsDefault.add(aux);
-            }
-
-            return labelsDefault;
-
-        } else return null;
+        return labels;
     }
 
     public Label saveNewLabel(NewLabelDto nameLabel, User user) throws LabelException {

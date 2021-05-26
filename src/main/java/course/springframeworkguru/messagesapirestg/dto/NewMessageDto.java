@@ -1,12 +1,11 @@
-package course.springframeworkguru.messagesapirestg.dto.input;
+package course.springframeworkguru.messagesapirestg.dto;
 
-import course.springframeworkguru.messagesapirestg.dto.output.RecipientDto;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class MessageDto {
+public class NewMessageDto {
 
     private String subject;
     private String body;

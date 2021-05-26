@@ -1,8 +1,6 @@
 package course.springframeworkguru.messagesapirestg.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -40,6 +39,10 @@ public class Message  implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private final Date datee = this.currentDateTime() ;
+
+    @Column(name = "is_deleted_by_user_from", columnDefinition = "boolean default false")
+    private boolean isDeletedByUserFrom;
+
     @OneToMany(mappedBy = "message")
     @JsonManagedReference
     private List<Recipient> recipientList;
@@ -56,5 +59,15 @@ public class Message  implements Serializable {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         return new Date(dtf.format(now));
+    }
+
+    @JsonGetter("recipientList")
+    public List<Recipient> getRecipientListInbox(){
+        List<Recipient> recipients = recipientList
+                .stream()
+                .filter(r ->  !(r.getRecipientType().getAcronym().equals("BCC")))
+                .collect(Collectors.toList());
+
+        return recipients;
     }
 }

@@ -1,21 +1,17 @@
 package course.springframeworkguru.messagesapirestg.controllers;
 
-import course.springframeworkguru.messagesapirestg.dto.HttpMessageDto;
-import course.springframeworkguru.messagesapirestg.dto.input.NewLabelDto;
-import course.springframeworkguru.messagesapirestg.dto.output.LabelDto;
+import course.springframeworkguru.messagesapirestg.dto.NewLabelDto;
+import course.springframeworkguru.messagesapirestg.dto.LabelDto;
 import course.springframeworkguru.messagesapirestg.exceptions.LabelException;
 import course.springframeworkguru.messagesapirestg.models.Label;
 import course.springframeworkguru.messagesapirestg.models.LabelXMessage;
 import course.springframeworkguru.messagesapirestg.models.User;
 import course.springframeworkguru.messagesapirestg.services.LabelXMessageService;
+import course.springframeworkguru.messagesapirestg.views.LabelView;
+import course.springframeworkguru.messagesapirestg.views.LabelXMessageView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @Controller
@@ -28,12 +24,12 @@ public class LabelController {
         this.labelXMessageService = labelXMessageService;
     }
 
-    public List<LabelDto> findLabelsByMessageId(int idMessage, int idUser) {
+    public List<LabelXMessageView> findLabelsByMessageId(int idMessage, int idUser) {
 
         return this.labelXMessageService.findLabelsByMessageIdAndUserId(idMessage, idUser);
     }
 
-    public List<LabelDto>findLabelsByUserId(int idUser){
+    public List<LabelView>findLabelsByUserId(int idUser){
 
         return this.labelXMessageService.findLabelsByUser(idUser);
     }

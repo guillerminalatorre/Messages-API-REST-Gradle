@@ -2,8 +2,8 @@ package course.springframeworkguru.messagesapirestg.controllers.web;
 
 import course.springframeworkguru.messagesapirestg.controllers.UserController;
 import course.springframeworkguru.messagesapirestg.dto.HttpMessageDto;
-import course.springframeworkguru.messagesapirestg.dto.input.LoginDto;
-import course.springframeworkguru.messagesapirestg.dto.input.NewUserDto;
+import course.springframeworkguru.messagesapirestg.dto.LoginDto;
+import course.springframeworkguru.messagesapirestg.dto.NewUserDto;
 import course.springframeworkguru.messagesapirestg.exceptions.LoginException;
 import course.springframeworkguru.messagesapirestg.exceptions.UserException;
 import course.springframeworkguru.messagesapirestg.models.User;

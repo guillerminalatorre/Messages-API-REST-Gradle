@@ -1,4 +1,4 @@
-package course.springframeworkguru.messagesapirestg.dto.input;
+package course.springframeworkguru.messagesapirestg.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

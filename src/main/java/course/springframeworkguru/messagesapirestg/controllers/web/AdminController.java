@@ -38,7 +38,7 @@ public class AdminController {
 
     }
 
-    @PutMapping("/users/make-admin")
+    @PutMapping("/user/make-admin")
     public ResponseEntity makeAdmin(@RequestParam("user") int idUser,
                                     @RequestParam("status") boolean status,
                                     @RequestHeader("Authorization") String sessionToken){
@@ -66,7 +66,7 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/users")
+    @DeleteMapping("/user")
     public ResponseEntity deleteUser(@RequestParam("user") int idUser,
                                      @RequestHeader("Authorization") String sessionToken) {
 

@@ -1,8 +1,6 @@
 package course.springframeworkguru.messagesapirestg.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 import org.springframework.web.bind.annotation.Mapping;
 
@@ -34,6 +32,9 @@ public class Recipient implements Serializable {
             foreignKey = @ForeignKey(name="FK_MESSAGE_RECIPIENT"))
     @JsonBackReference
     private Message message;
+
+    @Column(name = "is_deleted_by_recipient", columnDefinition = "boolean default false")
+    private boolean isDeletedByRecipient;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_recipient_type",

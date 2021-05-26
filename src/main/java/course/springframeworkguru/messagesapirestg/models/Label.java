@@ -26,6 +26,7 @@ public class Label  implements Serializable {
     private String name;
 
     @Column(name = "enabled", columnDefinition = "boolean default true")
+    @JsonIgnore
     private boolean isEnabled;
 
     @ManyToOne

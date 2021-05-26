@@ -1,13 +1,14 @@
 package course.springframeworkguru.messagesapirestg.services;
 
-import course.springframeworkguru.messagesapirestg.dto.input.LoginDto;
-import course.springframeworkguru.messagesapirestg.dto.input.NewUserDto;
+import course.springframeworkguru.messagesapirestg.dto.LoginDto;
+import course.springframeworkguru.messagesapirestg.dto.NewUserDto;
 import course.springframeworkguru.messagesapirestg.exceptions.UserException;
 import course.springframeworkguru.messagesapirestg.models.User;
 import course.springframeworkguru.messagesapirestg.models.employees.Employee;
 import course.springframeworkguru.messagesapirestg.repositories.EmployeeRepository;
 import course.springframeworkguru.messagesapirestg.repositories.UserRepository;
 import course.springframeworkguru.messagesapirestg.utils.Hash;
+import course.springframeworkguru.messagesapirestg.views.UserView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -100,12 +101,12 @@ public class UserService {
         else  throw new UserException("Update User Error", "Invalid User Id");
     }
 
-    public List<User> findByMailUsernameLike(String username){
+    public List<UserView> findByMailUsernameLike(String username){
 
         return this.userRepository.findByEmployeeMailUsernameLikeAndIsEnabledTrue("%"+username+"%");
     }
 
-    public List<User> findAll() {
+    public List<UserView> findAll() {
 
         return this.userRepository.findByIsEnabledTrue();
     }
