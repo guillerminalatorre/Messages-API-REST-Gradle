@@ -24,4 +24,12 @@ public interface MessageSentView {
 
     @JsonProperty("attachments")
     List<AttachmentView> getAttachmentsList();
+
+    void setId(int id);
+    void setDatee(String datee);
+    void setUserFrom(UserView userFrom);
+    void setRecipientList(List<RecipientView> recipientList);
+    void setSubject(String subject);
+    void setBody(String body);
+    void setAttachmentsList(List<AttachmentView> attachmentsList);
 }

@@ -57,6 +57,7 @@ public class UserService {
                 user.setEmployee(employee);
                 user.setUsername(newUserDto.getUsername());
                 user.setPassword(Hash.getHash(newUserDto.getPassword()));
+                user.setEnabled(true);
 
                 this.userRepository.save(user);
 
@@ -75,13 +76,17 @@ public class UserService {
 
             User user = this.userRepository.findByEmployeeMailUsernameAndIsEnabledTrue(newUserDto.getMailUsername());
 
-            user.setEmployee(employee);
-            user.setUsername(newUserDto.getUsername());
-            user.setPassword(Hash.getHash(newUserDto.getPassword()));
+            if(user != null) {
 
-            this.userRepository.save(user);
+                user.setEmployee(employee);
+                user.setUsername(newUserDto.getUsername());
+                user.setPassword(Hash.getHash(newUserDto.getPassword()));
 
-            return user;
+                this.userRepository.save(user);
+
+                return user;
+
+            }else throw new UserException("Update User Error", "No one User mail username is : " + newUserDto.getMailUsername());
         }
         else throw new UserException("Update User Error", "No one Employee mail username is : " + newUserDto.getMailUsername());
     }
