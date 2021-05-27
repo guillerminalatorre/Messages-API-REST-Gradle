@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -39,7 +38,7 @@ public class UserController {
 
     }
 
-    public User singIn(@RequestBody NewUserDto newUserDto) throws UserException {
+    public User singIn(NewUserDto newUserDto) throws UserException {
 
         return this.userService.save(newUserDto);
     }

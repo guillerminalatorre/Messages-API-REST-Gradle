@@ -16,8 +16,8 @@ course/springframeworkguru/messagesapirestg/models/employees/City.java
  course.springframeworkguru.messagesapirestg.models.employees.City$CityBuilder
 course/springframeworkguru/messagesapirestg/repositories/LabelXMessageRepository.java
  course.springframeworkguru.messagesapirestg.repositories.LabelXMessageRepository
-course/springframeworkguru/messagesapirestg/controllers/UserController.java
- course.springframeworkguru.messagesapirestg.controllers.UserController
+course/springframeworkguru/messagesapirestg/controllers/LabelController.java
+ course.springframeworkguru.messagesapirestg.controllers.LabelController
 course/springframeworkguru/messagesapirestg/repositories/MessageRepository.java
  course.springframeworkguru.messagesapirestg.repositories.MessageRepository
 course/springframeworkguru/messagesapirestg/session/Session.java
@@ -97,10 +97,11 @@ course/springframeworkguru/messagesapirestg/exceptions/LoginException.java
  course.springframeworkguru.messagesapirestg.exceptions.LoginException
 course/springframeworkguru/messagesapirestg/session/AdminSessionFilter.java
  course.springframeworkguru.messagesapirestg.session.AdminSessionFilter
-course/springframeworkguru/messagesapirestg/controllers/web/LoginController.java
- course.springframeworkguru.messagesapirestg.controllers.web.LoginController
-course/springframeworkguru/messagesapirestg/controllers/web/AdminController.java
- course.springframeworkguru.messagesapirestg.controllers.web.AdminController
+course/springframeworkguru/messagesapirestg/models/LabelXMessage.java
+ course.springframeworkguru.messagesapirestg.models.LabelXMessage
+ course.springframeworkguru.messagesapirestg.models.LabelXMessage$LabelXMessageBuilder
+course/springframeworkguru/messagesapirestg/services/LabelXMessageService.java
+ course.springframeworkguru.messagesapirestg.services.LabelXMessageService
 course/springframeworkguru/messagesapirestg/dto/HttpMessageDto.java
  course.springframeworkguru.messagesapirestg.dto.HttpMessageDto
 course/springframeworkguru/messagesapirestg/controllers/MessageController.java
@@ -118,12 +119,11 @@ course/springframeworkguru/messagesapirestg/repositories/LabelRepository.java
 course/springframeworkguru/messagesapirestg/models/Label.java
  course.springframeworkguru.messagesapirestg.models.Label
  course.springframeworkguru.messagesapirestg.models.Label$LabelBuilder
-course/springframeworkguru/messagesapirestg/controllers/LabelController.java
- course.springframeworkguru.messagesapirestg.controllers.LabelController
+course/springframeworkguru/messagesapirestg/controllers/web/LoginController.java
+ course.springframeworkguru.messagesapirestg.controllers.web.LoginController
+course/springframeworkguru/messagesapirestg/controllers/web/AdminController.java
+ course.springframeworkguru.messagesapirestg.controllers.web.AdminController
 course/springframeworkguru/messagesapirestg/controllers/web/ClientController.java
  course.springframeworkguru.messagesapirestg.controllers.web.ClientController
-course/springframeworkguru/messagesapirestg/services/LabelXMessageService.java
- course.springframeworkguru.messagesapirestg.services.LabelXMessageService
-course/springframeworkguru/messagesapirestg/models/LabelXMessage.java
- course.springframeworkguru.messagesapirestg.models.LabelXMessage
- course.springframeworkguru.messagesapirestg.models.LabelXMessage$LabelXMessageBuilder
+course/springframeworkguru/messagesapirestg/controllers/UserController.java
+ course.springframeworkguru.messagesapirestg.controllers.UserController
