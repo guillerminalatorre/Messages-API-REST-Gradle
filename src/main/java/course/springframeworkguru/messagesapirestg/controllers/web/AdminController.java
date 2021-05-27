@@ -6,8 +6,7 @@ import course.springframeworkguru.messagesapirestg.dto.HttpMessageDto;
 import course.springframeworkguru.messagesapirestg.exceptions.UserException;
 import course.springframeworkguru.messagesapirestg.models.User;
 import course.springframeworkguru.messagesapirestg.session.SessionManager;
-import course.springframeworkguru.messagesapirestg.views.MessageInboxView;
-import course.springframeworkguru.messagesapirestg.views.MessageSentView;
+import course.springframeworkguru.messagesapirestg.views.MessageView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +51,7 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        Page<MessageSentView> page = this.messageController.findMessagesByUserFrom(userId, pageable);
+        Page<MessageView> page = this.messageController.findMessagesByUserFrom(userId, pageable);
 
         if(page.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
@@ -72,7 +71,7 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        Page<MessageInboxView> page = this.messageController.findByRecipientId(userId, pageable);
+        Page<MessageView> page = this.messageController.findByRecipientId(userId, pageable);
 
         if(page.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 

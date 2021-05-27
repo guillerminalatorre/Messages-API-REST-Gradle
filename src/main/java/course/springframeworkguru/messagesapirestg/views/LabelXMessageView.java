@@ -5,4 +5,6 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 public interface LabelXMessageView {
     @JsonUnwrapped
     LabelView getLabel();
+
+    void setLabel(LabelView labelView);
 }

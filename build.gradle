@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.4.5'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
 group = 'course.springframeworkguru'
@@ -16,6 +17,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.session:spring-session-core'
 	implementation 'org.projectlombok:lombok:1.18.18'
 
@@ -32,10 +34,63 @@ dependencies {
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 
+	implementation group: 'junit', name: 'junit', version: '4.13'
+	implementation group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+
+	implementation group: 'org.jacoco', name: 'jacoco-maven-plugin', version: '0.8.2'
+
 	runtimeOnly 'org.postgresql:postgresql'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation ('org.springframework.boot:spring-boot-starter-test' ){
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine' // <- No version
+	}
 }
 
 test {
 	useJUnitPlatform()
+}
+
+jacocoTestReport {
+	reports {
+		xml {
+			enabled true // coveralls plugin depends on xml format report
+		}
+
+		html {
+			enabled true
+		}
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: ['**/utils/**',
+										'**/session/**',
+										'**/exceptions/**',
+										'**/config/**',
+										'**/models/**/*',
+										'**/dto/**',
+										'**/views/**'])
+		}))
+	}
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+
+		rule {
+			element = 'CLASS'
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.8
+			}
+
+		excludes = ['**/utils/**',
+					'**/session/**',
+					'**/exceptions/**',
+					'**/config/**',
+					'**/models/**/*',
+					'**/dto/**',
+					'**/views/**']
+		}
+	}
 }

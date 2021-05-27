@@ -1,6 +1,5 @@
 package course.springframeworkguru.messagesapirestg.controllers;
 
-import course.springframeworkguru.messagesapirestg.views.MessageInboxView;
 import course.springframeworkguru.messagesapirestg.dto.NewMessageDto;
 import course.springframeworkguru.messagesapirestg.exceptions.MessageException;
 import course.springframeworkguru.messagesapirestg.exceptions.RecipientException;
@@ -8,7 +7,7 @@ import course.springframeworkguru.messagesapirestg.models.Message;
 import course.springframeworkguru.messagesapirestg.models.Recipient;
 import course.springframeworkguru.messagesapirestg.models.User;
 import course.springframeworkguru.messagesapirestg.services.MessageService;
-import course.springframeworkguru.messagesapirestg.views.MessageSentView;
+import course.springframeworkguru.messagesapirestg.views.MessageView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -22,19 +21,19 @@ public class MessageController {
         this.messageService = messageService;
     }
 
-    public Page<MessageSentView> findMessagesByUserFrom(int idUser, Pageable pageable){
+    public Page<MessageView> findMessagesByUserFrom(int idUser, Pageable pageable){
         return this.messageService.findByUserFromId(idUser, pageable);
     }
 
-    public Page<MessageSentView> findMessagesSentByLabel(int idUser, int idLabel, Pageable pageable){
+    public Page<MessageView> findMessagesSentByLabel(int idUser, int idLabel, Pageable pageable){
         return this.messageService.findByUserFromIdAndLabel(idUser, idLabel, pageable);
     }
 
-    public Page<MessageInboxView> findByRecipientId(int idUser, Pageable pageable){
+    public Page<MessageView> findByRecipientId(int idUser, Pageable pageable){
         return this.messageService.findByRecipientId(idUser, pageable);
     }
 
-    public Page<MessageInboxView> findMessagesInboxByLabel(int idUser, int idLabel, Pageable pageable){
+    public Page<MessageView> findMessagesInboxByLabel(int idUser, int idLabel, Pageable pageable){
         return this.messageService.findByRecipientIdAndLabel(idUser, idLabel, pageable);
     }
 

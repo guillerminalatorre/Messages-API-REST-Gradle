@@ -14,6 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @Entity
+@EqualsAndHashCode
 @Table(name = "labels")
 public class Label  implements Serializable {
 

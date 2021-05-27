@@ -57,7 +57,7 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        Page<MessageSentView> page = this.messageController.findMessagesByUserFrom(currentUser.getId(), pageable);
+        Page<MessageView> page = this.messageController.findMessagesByUserFrom(currentUser.getId(), pageable);
 
         if(page.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
@@ -77,7 +77,7 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        Page<MessageSentView> page = this.messageController.findMessagesSentByLabel(currentUser.getId(), idLabel, pageable);
+        Page<MessageView> page = this.messageController.findMessagesSentByLabel(currentUser.getId(), idLabel, pageable);
 
         if(page.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
@@ -96,7 +96,7 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        Page<MessageInboxView> page = this.messageController.findByRecipientId(currentUser.getId(), pageable);
+        Page<MessageView> page = this.messageController.findByRecipientId(currentUser.getId(), pageable);
 
         if(page.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
@@ -116,7 +116,7 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        Page<MessageInboxView> page = this.messageController.findMessagesInboxByLabel(currentUser.getId(), idLabel, pageable);
+        Page<MessageView> page = this.messageController.findMessagesInboxByLabel(currentUser.getId(), idLabel, pageable);
 
         if(page.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 

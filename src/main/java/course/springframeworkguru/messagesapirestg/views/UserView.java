@@ -6,5 +6,8 @@ public interface UserView {
     @JsonUnwrapped
     EmployeeView getEmployee();
     String getUsername();
+
+    void setEmployee(EmployeeView employee);
+    void setUsername(String username);
 }
 

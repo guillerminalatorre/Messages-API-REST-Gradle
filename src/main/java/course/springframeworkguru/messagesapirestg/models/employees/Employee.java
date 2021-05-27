@@ -11,6 +11,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @Entity
+@ToString
 @Table(name = "employees")
 public class Employee  implements Serializable {
     @Id

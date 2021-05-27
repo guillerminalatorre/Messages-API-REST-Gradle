@@ -3,6 +3,7 @@ package course.springframeworkguru.messagesapirestg.dto;
 import lombok.*;
 
 @Data
+@Builder
 public class NewUserDto {
 
     private String username;

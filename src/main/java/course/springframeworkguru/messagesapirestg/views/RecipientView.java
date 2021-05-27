@@ -7,4 +7,7 @@ public interface RecipientView {
     UserView getUser();
     @JsonUnwrapped
     RecipientTypeView getRecipientType();
+
+    void setUser(UserView user);
+    void setRecipientType(RecipientTypeView recipientType);
 }

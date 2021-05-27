@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Builder
 @Entity
+@ToString
 @Table(name = "messages")
 public class Message  implements Serializable {
 
@@ -69,5 +71,13 @@ public class Message  implements Serializable {
                 .collect(Collectors.toList());
 
         return recipients;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Message)) return false;
+        Message message = (Message) o;
+        return getId() == message.getId() && isDeletedByUserFrom() == message.isDeletedByUserFrom() && Objects.equals(getSubject(), message.getSubject()) && Objects.equals(getBody(), message.getBody()) && Objects.equals(getUserFrom().getId(), message.getUserFrom().getId());
     }
 }

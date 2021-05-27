@@ -1,6 +1,5 @@
 package course.springframeworkguru.messagesapirestg.services;
 
-import course.springframeworkguru.messagesapirestg.views.MessageInboxView;
 import course.springframeworkguru.messagesapirestg.dto.NewMessageDto;
 import course.springframeworkguru.messagesapirestg.dto.RecipientDto;
 import course.springframeworkguru.messagesapirestg.exceptions.MessageException;
@@ -10,7 +9,7 @@ import course.springframeworkguru.messagesapirestg.models.Message;
 import course.springframeworkguru.messagesapirestg.models.Recipient;
 import course.springframeworkguru.messagesapirestg.models.User;
 import course.springframeworkguru.messagesapirestg.repositories.*;
-import course.springframeworkguru.messagesapirestg.views.MessageSentView;
+import course.springframeworkguru.messagesapirestg.views.MessageView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,21 +41,21 @@ public class MessageService {
         this.attachmentRepository = attachmentRepository;
     }
 
-    public Page<MessageSentView> findByUserFromId (int id, Pageable pageable){
+    public Page<MessageView> findByUserFromId (int id, Pageable pageable){
 
         return this.messageRepository.findDistinctByUserFromIdAndIsDeletedByUserFromFalse(id, pageable);
     }
 
-    public Page<MessageInboxView> findByRecipientId (int id, Pageable pageable){
+    public Page<MessageView> findByRecipientId (int id, Pageable pageable){
 
         return this.messageRepository.findDistinctByRecipientListUserIdAndRecipientListIsDeletedByRecipientFalse(id,pageable);
     }
-    public Page<MessageInboxView> findByRecipientIdAndLabel (int idUser, int idLabel, Pageable pageable){
+    public Page<MessageView> findByRecipientIdAndLabel (int idUser, int idLabel, Pageable pageable){
 
         return this.messageRepository.findDistinctByRecipientListUserIdAndLabelXMessageListUserIdAndLabelXMessageListLabelIdAndLabelXMessageListLabelIsEnabledTrueAndRecipientListIsDeletedByRecipientFalse(idUser, idUser, idLabel, pageable);
     }
 
-    public Page<MessageSentView> findByUserFromIdAndLabel (int idUser, int idLabel, Pageable pageable){
+    public Page<MessageView> findByUserFromIdAndLabel (int idUser, int idLabel, Pageable pageable){
 
         return this.messageRepository.findDistinctByUserFromIdAndLabelXMessageListUserIdAndLabelXMessageListLabelIdAndLabelXMessageListLabelIsEnabledTrueAndIsDeletedByUserFromFalse(idUser, idUser, idLabel, pageable);
     }
@@ -69,6 +68,8 @@ public class MessageService {
         message.setSubject(newMessageDto.getSubject());
 
         message.setUserFrom(userFrom);
+
+        System.out.println(message.getDatee());
 
         if((this.messageRepository.save(message)) != null) {
 
@@ -110,7 +111,9 @@ public class MessageService {
             }else statusRecipients.append(", "+recipientDto.getMailUsername());
         }
 
-        if(!recipients.isEmpty()) this.recipientRepository.saveAll(recipients);
+        if(!recipients.isEmpty()) {
+            this.recipientRepository.saveAll(recipients);
+        }
 
 
 
@@ -127,7 +130,7 @@ public class MessageService {
 
     private void saveAttachments(String[] attachments, Message message) throws RecipientException {
 
-        if(attachments.length > 0){
+        if(attachments != null && attachments.length > 0 ){
 
             List<Attachment> attachmentsList = new ArrayList<Attachment>();
 

@@ -9,7 +9,6 @@ import course.springframeworkguru.messagesapirestg.views.LabelView;
 import course.springframeworkguru.messagesapirestg.views.LabelXMessageView;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,9 +37,10 @@ public class LabelXMessageService {
 
         return labels;
     }
-    public List<LabelView> findLabelsByUser(int id){
 
-        List<LabelView> labels =  this.labelRepository.findByIsEnabledTrueAndUserIdOrUserId(id, null);
+    public List<LabelView> findLabelsByUser(int idUser){
+
+        List<LabelView> labels =  this.labelRepository.findByIsEnabledTrueAndUserIdOrUserId(idUser, null);
 
         return labels;
     }
@@ -51,6 +51,7 @@ public class LabelXMessageService {
 
         label.setName(nameLabel.getName());
         label.setUser(user);
+        label.setEnabled(true);
 
         Label newLabel = this.labelRepository.save(label);
 

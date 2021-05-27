@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.List;
 
 @JsonPropertyOrder({"id","date", "userFrom", "recipients","subject", "body", "attachments"})
-public interface MessageSentView {
+public interface MessageView {
 
     int getId();
 
