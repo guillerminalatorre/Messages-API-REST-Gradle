@@ -32,7 +32,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginDto loginDto) throws UserException, LoginException {
+    public ResponseEntity login(@RequestBody LoginDto loginDto){
 
         ResponseEntity response;
 
@@ -88,5 +88,4 @@ public class LoginController {
         responseHeaders.set("Authorization", token);
         return responseHeaders;
     }
-
 }

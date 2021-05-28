@@ -175,7 +175,7 @@ public class ClientController {
     }
 
     @GetMapping("/users/all")
-    public ResponseEntity findUserByMailUsernameLike(@RequestHeader("Authorization") String sessionToken){
+    public ResponseEntity findUsers(@RequestHeader("Authorization") String sessionToken){
 
         User currentUser = sessionManager.getCurrentUser(sessionToken);
         if (currentUser == null) {
@@ -278,7 +278,7 @@ public class ClientController {
     }
 
     @PutMapping("/user/update")
-    private ResponseEntity update(@RequestBody NewUserDto newUserDto,@RequestHeader("Authorization") String sessionToken){
+    public ResponseEntity update(@RequestBody NewUserDto newUserDto,@RequestHeader("Authorization") String sessionToken){
 
 
         User currentUser = sessionManager.getCurrentUser(sessionToken);
@@ -360,7 +360,7 @@ public class ClientController {
         }
 
         try{
-            Recipient recipient = this.messageController.deleteInbox(idMessage, currentUser.getId());
+            this.messageController.deleteInbox(idMessage, currentUser.getId());
 
             return new ResponseEntity(HttpStatus.OK);
 

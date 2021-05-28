@@ -85,8 +85,8 @@ public class UserControllerTest {
         Assert.assertEquals(user, user1);
     }
 
-    @Test(expected = LoginException.class)//UserException tested in UserServiceTest class
-    public void loginFail() throws UserException, LoginException {
+    @Test(expected = LoginException.class)
+    public void loginFail1() throws UserException, LoginException {
         User user = createUser();
         LoginDto loginDto = createLoginDto();
 
@@ -98,8 +98,21 @@ public class UserControllerTest {
         User user1 = this.userController.login(loginDto, sessionManager);
     }
 
-    @Test//UserException tested in UserServiceTest class
-    public void singIn() throws UserException {
+    @Test(expected = UserException.class)
+    public void loginFail() throws UserException, LoginException {
+        User user = createUser();
+        LoginDto loginDto = createLoginDto();
+
+        SessionManager sessionManager = new SessionManager();
+        sessionManager.createSession(user);
+
+        when(this.userService.login(loginDto)).thenThrow(UserException.class);
+
+        User user1 = this.userController.login(loginDto, sessionManager);
+    }
+
+    @Test
+    public void singInOk() throws UserException {
         User user = createUser();
         NewUserDto newUserDto = createNewUserDto();
 
@@ -110,8 +123,18 @@ public class UserControllerTest {
         Assert.assertEquals(user, user1);
     }
 
-    @Test//UserException tested in UserServiceTest class
-    public void update() throws UserException {
+    @Test(expected = UserException.class)
+    public void singInOFail() throws UserException {
+        User user = createUser();
+        NewUserDto newUserDto = createNewUserDto();
+
+        when(this.userService.save(newUserDto)).thenThrow(UserException.class);
+
+        User user1 = this.userController.singIn(newUserDto);
+    }
+
+    @Test
+    public void updateOk() throws UserException {
         User user = createUser();
         NewUserDto newUserDto = createNewUserDto();
 
@@ -122,8 +145,18 @@ public class UserControllerTest {
         Assert.assertEquals(user, user1);
     }
 
-    @Test//UserException tested in UserServiceTest class
-    public void makeAdmin() throws UserException {
+    @Test(expected = UserException.class)
+    public void updateFail() throws UserException {
+        User user = createUser();
+        NewUserDto newUserDto = createNewUserDto();
+
+        when(this.userService.update(newUserDto)).thenThrow(UserException.class);
+
+        User user1 = this.userController.update(newUserDto);
+    }
+
+    @Test
+    public void makeAdminOk() throws UserException {
         User user = createUser();
 
         when(this.userService.changeAdminStatus(0,false)).thenReturn(user);
@@ -131,6 +164,15 @@ public class UserControllerTest {
         User user1 = this.userController.makeAdmin(0,false);
 
         Assert.assertEquals(user, user1);
+    }
+
+    @Test(expected = UserException.class)
+    public void makeAdminFail() throws UserException {
+        User user = createUser();
+
+        when(this.userService.changeAdminStatus(0,false)).thenThrow(UserException.class);
+
+        User user1 = this.userController.makeAdmin(0,false);
     }
 
     @Test
@@ -177,7 +219,7 @@ public class UserControllerTest {
         Assert.assertEquals(usersView, usersView1);
     }
 
-    @Test//UserException tested in UserServiceTest class
+    @Test
     public void deleteOk() throws UserException {
         User user = createUser();
         user.setEnabled(false);
@@ -187,5 +229,15 @@ public class UserControllerTest {
         User user1 = this.userController.delete(user.getId());
 
         Assert.assertEquals(user, user1);
+    }
+
+    @Test(expected = UserException.class)
+    public void deleteFail() throws UserException {
+        User user = createUser();
+        user.setEnabled(false);
+
+        when(this.userService.delete(user.getId())).thenThrow(UserException.class);
+
+        User user1 = this.userController.delete(user.getId());
     }
 }

@@ -1,7 +1,6 @@
 package course.springframeworkguru.messagesapirestg.controllers;
 
 import course.springframeworkguru.messagesapirestg.dto.NewLabelDto;
-import course.springframeworkguru.messagesapirestg.dto.LabelDto;
 import course.springframeworkguru.messagesapirestg.exceptions.LabelException;
 import course.springframeworkguru.messagesapirestg.models.Label;
 import course.springframeworkguru.messagesapirestg.models.LabelXMessage;
