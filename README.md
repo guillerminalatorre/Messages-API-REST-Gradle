@@ -36,3 +36,21 @@
 - Spring Boot 2.4.5
 - Java 11.0.11
 - Gradle 7.0.2
+
+## Installation
+Create local PostgreSQL database and configure src/main/resources/application.properties. Run to create tables.
+
+To install dependencies:
+```sh
+cd repository_location
+gradle build
+```
+
+## Testing
+```sh
+cd (repository_location)
+gradle test
+gradle jacocoTestCoverageVerification
+```
+Check build/reports/jacoco/test/html/index.html to see Jacoco report.
+
