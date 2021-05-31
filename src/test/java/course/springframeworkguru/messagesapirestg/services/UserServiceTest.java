@@ -4,11 +4,11 @@ import course.springframeworkguru.messagesapirestg.dto.LoginDto;
 import course.springframeworkguru.messagesapirestg.dto.NewUserDto;
 import course.springframeworkguru.messagesapirestg.exceptions.UserException;
 import course.springframeworkguru.messagesapirestg.models.User;
-import course.springframeworkguru.messagesapirestg.models.employees.City;
 import course.springframeworkguru.messagesapirestg.models.employees.Employee;
 import course.springframeworkguru.messagesapirestg.repositories.EmployeeRepository;
 import course.springframeworkguru.messagesapirestg.repositories.UserRepository;
 import course.springframeworkguru.messagesapirestg.utils.Hash;
+import course.springframeworkguru.messagesapirestg.utils.ObjectsFactory;
 import course.springframeworkguru.messagesapirestg.views.EmployeeView;
 import course.springframeworkguru.messagesapirestg.views.UserView;
 import org.junit.Assert;
@@ -35,60 +35,28 @@ public class UserServiceTest {
 
     private ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
 
+    private ObjectsFactory objectsFactory = new ObjectsFactory();
+
     @Before
     public void setUp() throws Exception {
         initMocks(this);
         this.userService = new UserService(this.userRepository, this.employeeRepository);
     }
-
-    private LoginDto createLoginDto(){
-        return new LoginDto("pepe", "1234");
-    }
-
-    private NewUserDto createNewUserDto(){
-        return NewUserDto.builder()
-                .username("jose perez")
-                .mailUsername("pepe")
-                .password("1234")
-                .build();
-    }
-
-    private Employee createEmployee(){
-        return Employee.builder()
-                .id(1L)
-                .mailUsername("pepe")
-                .idNumber("1234567")
-                .lastName("perez")
-                .name("jose")
-                .city(new City())
-                .build();
-    }
-
-    private User createUser(){
-        return User.builder()
-                .id(0)
-                .username("jose perez")
-                .isAdmin(false)
-                .isEnabled(true)
-                .password("1234")
-                .employee(createEmployee())
-                .build();
-    }
-
+    
     @Test
     public void loginOk() throws UserException {
-        User user = this.createUser();
+        User user = this.objectsFactory.createUser();
 
         when(this.userRepository.findByEmployeeMailUsernameAndIsEnabledTrue(user.getEmployee().getMailUsername())).thenReturn(user);
 
-        User user1 = this.userService.login(createLoginDto());
+        User user1 = this.userService.login(objectsFactory.createLoginDto());
 
         Assert.assertEquals(user, user1);
     }
 
     @Test(expected = UserException.class)
     public void loginFail() throws UserException {
-        User user = this.createUser();
+        User user = this.objectsFactory.createUser();
 
         when(this.userRepository.findByEmployeeMailUsernameAndIsEnabledTrue(user.getEmployee().getMailUsername())).thenReturn(user);
 
@@ -99,9 +67,9 @@ public class UserServiceTest {
 
     @Test
     public void saveOk() throws UserException {
-        NewUserDto newUserDto =  this.createNewUserDto();
+        NewUserDto newUserDto =  this.objectsFactory.createNewUserDto();
 
-        Employee employee = this.createEmployee();
+        Employee employee = this.objectsFactory.createEmployee();
 
         User user = new User();
         user.setAdmin(false);
@@ -123,9 +91,9 @@ public class UserServiceTest {
 
     @Test(expected = UserException.class)
     public void saveFail() throws UserException {
-        NewUserDto newUserDto =  this.createNewUserDto();
+        NewUserDto newUserDto =  this.objectsFactory.createNewUserDto();
 
-        Employee employee = this.createEmployee();
+        Employee employee = this.objectsFactory.createEmployee();
 
         User user = new User();
         user.setAdmin(false);
@@ -143,9 +111,9 @@ public class UserServiceTest {
 
     @Test
     public void updateOk() throws UserException {
-        NewUserDto newUserDto =  this.createNewUserDto();
+        NewUserDto newUserDto =  this.objectsFactory.createNewUserDto();
 
-        Employee employee = this.createEmployee();
+        Employee employee = this.objectsFactory.createEmployee();
 
         User user = new User();
         user.setAdmin(false);
@@ -165,9 +133,9 @@ public class UserServiceTest {
 
     @Test(expected = UserException.class)
     public void updateFail() throws UserException {
-        NewUserDto newUserDto =  this.createNewUserDto();
+        NewUserDto newUserDto =  this.objectsFactory.createNewUserDto();
 
-        Employee employee = this.createEmployee();
+        Employee employee = this.objectsFactory.createEmployee();
 
         User user = new User();
         user.setAdmin(false);
@@ -186,7 +154,7 @@ public class UserServiceTest {
     @Test
     public void changeAdminStatusOk() throws UserException {
 
-        User user = this.createUser();
+        User user = this.objectsFactory.createUser();
 
         when(this.userRepository.findByIdAndIsEnabledTrue(user.getId())).thenReturn(user);
         when(this.userRepository.save(user)).thenReturn(user);
@@ -202,7 +170,7 @@ public class UserServiceTest {
     @Test(expected = UserException.class)
     public void changeAdminStatusFail() throws UserException {
 
-        User user = this.createUser();
+        User user = this.objectsFactory.createUser();
 
         when(this.userRepository.findByIdAndIsEnabledTrue(user.getId())).thenReturn(null);
         when(this.userRepository.save(user)).thenReturn(user);
@@ -212,11 +180,11 @@ public class UserServiceTest {
 
     @Test
     public void findByMailUsernameLike() {
-        Employee employee = createEmployee();
+        Employee employee = objectsFactory.createEmployee();
         EmployeeView employeeView = this.factory.createProjection(EmployeeView.class);
         employeeView.setMailUsername(employee.getMailUsername());
 
-        User user = createUser();
+        User user = objectsFactory.createUser();
         UserView userView = this.factory.createProjection(UserView.class);
         userView.setUsername(user.getUsername());
         userView.setEmployee(employeeView);
@@ -235,11 +203,11 @@ public class UserServiceTest {
 
     @Test
     public void findAll() {
-        Employee employee = createEmployee();
+        Employee employee = objectsFactory.createEmployee();
         EmployeeView employeeView = this.factory.createProjection(EmployeeView.class);
         employeeView.setMailUsername(employee.getMailUsername());
 
-        User user = createUser();
+        User user = objectsFactory.createUser();
         UserView userView = this.factory.createProjection(UserView.class);
         userView.setUsername(user.getUsername());
         userView.setEmployee(employeeView);
@@ -257,7 +225,7 @@ public class UserServiceTest {
 
     @Test
     public void deleteOk() throws UserException {
-        User user = this.createUser();
+        User user = this.objectsFactory.createUser();
 
         when(this.userRepository.findByIdAndIsEnabledTrue(user.getId())).thenReturn(user);
 
@@ -272,7 +240,7 @@ public class UserServiceTest {
 
     @Test(expected = UserException.class)
     public void deleteFail() throws UserException {
-        User user = this.createUser();
+        User user = this.objectsFactory.createUser();
 
         when(this.userRepository.findByIdAndIsEnabledTrue(user.getId())).thenReturn(null);
 

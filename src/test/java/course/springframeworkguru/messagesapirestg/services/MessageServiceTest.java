@@ -1,12 +1,11 @@
 package course.springframeworkguru.messagesapirestg.services;
 
 import course.springframeworkguru.messagesapirestg.dto.NewMessageDto;
-import course.springframeworkguru.messagesapirestg.dto.RecipientDto;
 import course.springframeworkguru.messagesapirestg.exceptions.MessageException;
 import course.springframeworkguru.messagesapirestg.exceptions.RecipientException;
 import course.springframeworkguru.messagesapirestg.models.*;
-import course.springframeworkguru.messagesapirestg.models.employees.Employee;
 import course.springframeworkguru.messagesapirestg.repositories.*;
+import course.springframeworkguru.messagesapirestg.utils.ObjectsFactory;
 import course.springframeworkguru.messagesapirestg.views.*;
 import org.junit.Assert;
 import org.junit.Before;
@@ -37,6 +36,9 @@ public class MessageServiceTest {
 
     private MessageService messageService;
 
+    private ObjectsFactory objectsFactory = new ObjectsFactory();
+
+
     private ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
 
     @Before
@@ -47,120 +49,11 @@ public class MessageServiceTest {
                 this.recipientRepository, this.attachmentRepository);
     }
 
-    private Employee createEmployee(){
-        return Employee.builder()
-                .id(1L)
-                .mailUsername("pepe")
-                .idNumber("1234567")
-                .lastName("perez")
-                .name("jose")
-                .city(null)
-                .build();
-    }
-
-    private User createUser(){
-        return User.builder()
-                .id(0)
-                .username("jose perez")
-                .isAdmin(false)
-                .isEnabled(true)
-                .password("1234")
-                .employee(createEmployee())
-                .build();
-    }
-
-    private RecipientType createRecipientType(){
-        return RecipientType.builder()
-                .id(1)
-                .name("Primary Receptor")
-                .acronym("To").build();
-    }
-
-    private Recipient createRecipient(Message message){
-        return Recipient.builder().id(1)
-                .message(message)
-                .recipientType(createRecipientType())
-                .isDeletedByRecipient(false)
-                .user(createUser())
-                .build();
-    }
-
-    private Message createMessage(){
-        Message message = Message.builder()
-                .id(0)
-                .body("Body Message")
-                .subject("Subject Message")
-                .labelXMessageList(null)
-                .isDeletedByUserFrom(false)
-                .userFrom(createUser())
-                .recipientList(null)
-                .attachmentsList(null)
-                .build();
-
-        List<Recipient> recipientList = new ArrayList<Recipient>();
-        recipientList.add(createRecipient(message));
-
-        message.setRecipientList(recipientList);
-
-        return message;
-    }
-
-    private MessageView createMessageView(){
-        Employee employee = createEmployee();
-        EmployeeView employeeView = this.factory.createProjection(EmployeeView.class);
-        employeeView.setMailUsername(employee.getMailUsername());
-
-        User user = createUser();
-        UserView userView = this.factory.createProjection(UserView.class);
-        userView.setUsername(user.getUsername());
-        userView.setEmployee(employeeView);
-
-        Message message = createMessage();
-
-        RecipientTypeView recipientTypeView = this.factory.createProjection(RecipientTypeView.class);
-        recipientTypeView.setAcronym(message.getRecipientList()
-                .get(0).getRecipientType().getAcronym());
-
-        RecipientView recipientView = this.factory.createProjection(RecipientView.class);
-        recipientView.setUser(userView);
-        recipientView.setRecipientType(recipientTypeView);
-
-        List<RecipientView> recipientViewList =  new ArrayList<RecipientView>();
-        recipientViewList.add(recipientView);
-
-        MessageView messageView = this.factory.createProjection(MessageView.class);
-        messageView.setId(message.getId());
-        messageView.setDatee(message.getDatee().toString());
-        messageView.setUserFrom(userView);
-        messageView.setAttachmentsList(null);
-        messageView.setBody(message.getBody());
-        messageView.setSubject(message.getSubject());
-        messageView.setRecipientList(recipientViewList);
-
-        return messageView;
-    }
-
-    private RecipientDto createRecipientDto(){
-        return RecipientDto.builder().acronymRecipientType("To").mailUsername("pepe").build();
-    }
-
-    private NewMessageDto createNewMessageDto(){
-        List<RecipientDto> recipientDtos = new ArrayList<RecipientDto>();
-        recipientDtos.add(createRecipientDto());
-
-        return NewMessageDto.builder()
-                .body("Body Message")
-                .subject("Subject Message")
-                .attachments(null)
-                .recipients(recipientDtos)
-                .build();
-    }
-
     @Test
     public void findByUserFromId() {
-        Message message = createMessage();
+        Message message = objectsFactory.createMessage();
 
-        MessageView messageView = createMessageView();
+        MessageView messageView = objectsFactory.createMessageView();
 
         List<MessageView> messageViewList =  new ArrayList<MessageView>();
         messageViewList.add(messageView);
@@ -177,9 +70,9 @@ public class MessageServiceTest {
 
     @Test
     public void findByRecipientId() {
-        Message message = createMessage();
+        Message message = objectsFactory.createMessage();
 
-        MessageView messageView = createMessageView();
+        MessageView messageView = objectsFactory.createMessageView();
 
         List<MessageView> messageViewList =  new ArrayList<MessageView>();
         messageViewList.add(messageView);
@@ -196,7 +89,7 @@ public class MessageServiceTest {
 
     @Test
     public void findByRecipientIdAndLabel() {
-        Message message = createMessage();
+        Message message = objectsFactory.createMessage();
 
         List<MessageView> messageViewList =  new ArrayList<MessageView>();
 
@@ -214,7 +107,7 @@ public class MessageServiceTest {
     @Test
     public void findByUserFromIdAndLabel() {
 
-        Message message = createMessage();
+        Message message = objectsFactory.createMessage();
 
         List<MessageView> messageViewList =  new ArrayList<MessageView>();
 
@@ -231,22 +124,22 @@ public class MessageServiceTest {
 
     @Test
     public void sendOk() throws MessageException, RecipientException {
-        NewMessageDto newMessageDto =  createNewMessageDto();
+        NewMessageDto newMessageDto =  objectsFactory.createNewMessageDto();
 
-        User user= createUser();
+        User user= objectsFactory.createUser();
 
         Message auxMessage = new Message();
         auxMessage.setBody(newMessageDto.getBody());
         auxMessage.setSubject(newMessageDto.getSubject());
         auxMessage.setUserFrom(user);
 
-        Message message = createMessage();
+        Message message = objectsFactory.createMessage();
         message.setRecipientList(null);
 
         when(this.messageRepository.save(auxMessage)).thenReturn(message);
         when(this.attachmentRepository.saveAll(message.getAttachmentsList())).thenReturn(message.getAttachmentsList());
         when(this.userRepository.findByEmployeeMailUsernameAndIsEnabledTrue(newMessageDto.getRecipients().get(0).getMailUsername())).thenReturn(user);
-        when(this.recipientTypeRepository.findByAcronym(createRecipientType().getAcronym())).thenReturn(createRecipientType());
+        when(this.recipientTypeRepository.findByAcronym(objectsFactory.createRecipientType().getAcronym())).thenReturn(objectsFactory.createRecipientType());
         when(this.recipientRepository.saveAll(message.getRecipientList())).thenReturn(message.getRecipientList());
 
         Message message1 = this.messageService.send(newMessageDto, user);
@@ -256,11 +149,11 @@ public class MessageServiceTest {
 
     @Test(expected = MessageException.class)
     public void sendFail1() throws RecipientException, MessageException {
-        NewMessageDto newMessageDto =  createNewMessageDto();
+        NewMessageDto newMessageDto =  objectsFactory.createNewMessageDto();
 
-        User user= createUser();
+        User user= objectsFactory.createUser();
 
-        Message message = createMessage();
+        Message message = objectsFactory.createMessage();
 
         when(this.messageRepository.save(message)).thenReturn(null);
 
@@ -271,16 +164,16 @@ public class MessageServiceTest {
 
     @Test(expected = RecipientException.class)
     public void sendFail2() throws RecipientException, MessageException {
-        NewMessageDto newMessageDto =  createNewMessageDto();
+        NewMessageDto newMessageDto =  objectsFactory.createNewMessageDto();
 
-        User user= createUser();
+        User user= objectsFactory.createUser();
 
         Message auxMessage = new Message();
         auxMessage.setBody(newMessageDto.getBody());
         auxMessage.setSubject(newMessageDto.getSubject());
         auxMessage.setUserFrom(user);
 
-        Message message = createMessage();
+        Message message = objectsFactory.createMessage();
         message.setRecipientList(null);
 
         when(this.messageRepository.save(auxMessage)).thenReturn(message);
@@ -294,7 +187,7 @@ public class MessageServiceTest {
 
     @Test
     public void deleteSentOk() throws MessageException {
-        Message message = createMessage();
+        Message message = objectsFactory.createMessage();
         message.setDeletedByUserFrom(true);
 
         when(this.messageRepository.findById(message.getId())).thenReturn(message);
@@ -307,7 +200,7 @@ public class MessageServiceTest {
 
     @Test(expected = MessageException.class)
     public void deleteSentFail() throws MessageException {
-        Message message = createMessage();
+        Message message = objectsFactory.createMessage();
         message.setDeletedByUserFrom(true);
 
         when(this.messageRepository.findById(message.getId())).thenReturn(null);
@@ -317,9 +210,9 @@ public class MessageServiceTest {
 
     @Test
     public void deleteInboxOk() throws MessageException {
-        Message message = createMessage();
+        Message message = objectsFactory.createMessage();
         Recipient recipient = message.getRecipientList().get(0);
-        User user = createUser();
+        User user = objectsFactory.createUser();
 
         when(this.recipientRepository.findByMessageIdAndUserId(message.getId(), user.getId())).thenReturn(recipient);
         when(this.recipientRepository.save(recipient)).thenReturn(recipient);
@@ -333,9 +226,9 @@ public class MessageServiceTest {
 
     @Test(expected = MessageException.class)
     public void deleteInboxFail() throws MessageException {
-        Message message = createMessage();
+        Message message = objectsFactory.createMessage();
         Recipient recipient = message.getRecipientList().get(0);
-        User user = createUser();
+        User user = objectsFactory.createUser();
 
         when(this.recipientRepository.findByMessageIdAndUserId(message.getId(), user.getId())).thenReturn(null);
 

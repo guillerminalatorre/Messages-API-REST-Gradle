@@ -1,15 +1,15 @@
 package course.springframeworkguru.messagesapirestg.controllers.web;
 
 import course.springframeworkguru.messagesapirestg.controllers.UserController;
+import course.springframeworkguru.messagesapirestg.dto.HttpMessageDto;
 import course.springframeworkguru.messagesapirestg.dto.LoginDto;
 import course.springframeworkguru.messagesapirestg.dto.NewUserDto;
 import course.springframeworkguru.messagesapirestg.exceptions.LoginException;
 import course.springframeworkguru.messagesapirestg.exceptions.UserException;
 import course.springframeworkguru.messagesapirestg.models.User;
-import course.springframeworkguru.messagesapirestg.models.employees.City;
-import course.springframeworkguru.messagesapirestg.models.employees.Employee;
 import course.springframeworkguru.messagesapirestg.session.SessionManager;
 import course.springframeworkguru.messagesapirestg.utils.Hash;
+import course.springframeworkguru.messagesapirestg.utils.ObjectsFactory;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -37,6 +37,8 @@ public class LoginControllerTest {
     private SessionManager sessionManager;
 
     private LoginController loginController;
+    
+    private ObjectsFactory objectsFactory = new ObjectsFactory();
 
     @Before
     public void setUp() throws Exception {
@@ -53,45 +55,11 @@ public class LoginControllerTest {
         RequestContextHolder.resetRequestAttributes();
     }
 
-    private LoginDto createLoginDto(){
-        return new LoginDto("pepe", "1234");
-    }
-
-    private NewUserDto createNewUserDto(){
-        return NewUserDto.builder()
-                .username("jose perez")
-                .mailUsername("pepe")
-                .password("1234")
-                .build();
-    }
-
-    private Employee createEmployee(){
-        return Employee.builder()
-                .id(1L)
-                .mailUsername("pepe")
-                .idNumber("1234567")
-                .lastName("perez")
-                .name("jose")
-                .city(new City())
-                .build();
-    }
-
-    private User createUser(){
-        return User.builder()
-                .id(0)
-                .username("jose perez")
-                .isAdmin(false)
-                .isEnabled(true)
-                .password("1234")
-                .employee(createEmployee())
-                .build();
-    }
-
     @Test
     public void loginOk() throws LoginException, UserException {
         ResponseEntity response;
-        LoginDto loginDto  =createLoginDto();
-        User user = createUser();
+        LoginDto loginDto  =objectsFactory.createLoginDto();
+        User user = objectsFactory.createUser();
         loginDto.setPassword(Hash.getHash(loginDto.getPassword()));
 
         when(this.userController.login(loginDto,sessionManager)).thenReturn(user);
@@ -105,13 +73,60 @@ public class LoginControllerTest {
     }
 
     @Test
-    public void singin() throws UserException, URISyntaxException {
-        User user = createUser();
-        NewUserDto newUserDto = createNewUserDto();
+    public void loginFail1() throws LoginException, UserException {
+        ResponseEntity response;
+        LoginDto loginDto  =objectsFactory.createLoginDto();
+        User user = objectsFactory.createUser();
+        loginDto.setPassword(Hash.getHash(loginDto.getPassword()));
+
+        when(this.userController.login(loginDto,sessionManager)).thenThrow(LoginException.class);
+
+        ResponseEntity responseEntity = new ResponseEntity(new HttpMessageDto(null,null), HttpStatus.UNAUTHORIZED);
+
+        ResponseEntity responseEntity1 = this.loginController.login(loginDto);
+
+        Assert.assertEquals(responseEntity,responseEntity1);
+    }
+
+    @Test
+    public void loginFail2() throws LoginException, UserException {
+        ResponseEntity response;
+        LoginDto loginDto  =objectsFactory.createLoginDto();
+        User user = objectsFactory.createUser();
+        loginDto.setPassword(Hash.getHash(loginDto.getPassword()));
+
+        when(this.userController.login(loginDto,sessionManager)).thenReturn(user);
+        when(this.sessionManager.createSession(user)).thenThrow(UserException.class);
+
+        ResponseEntity responseEntity = new ResponseEntity(new HttpMessageDto(null,null), HttpStatus.UNAUTHORIZED);
+
+        ResponseEntity responseEntity1 = this.loginController.login(loginDto);
+
+        Assert.assertEquals(responseEntity,responseEntity1);
+    }
+
+    @Test
+    public void singinOk() throws UserException, URISyntaxException {
+        User user = objectsFactory.createUser();
+        NewUserDto newUserDto = objectsFactory.createNewUserDto();
 
         ResponseEntity responseEntity = ResponseEntity.created(new URI("http://localhost/0")).build();
 
         when(this.userController.singIn(newUserDto)).thenReturn(user);
+
+        ResponseEntity responseEntity1 = this.loginController.singin(newUserDto);
+
+        Assert.assertEquals(responseEntity,responseEntity1);
+    }
+
+    @Test
+    public void singinFail() throws UserException, URISyntaxException {
+        User user = objectsFactory.createUser();
+        NewUserDto newUserDto = objectsFactory.createNewUserDto();
+
+        when(this.userController.singIn(newUserDto)).thenThrow(UserException.class);
+
+        ResponseEntity responseEntity = new ResponseEntity(new HttpMessageDto(null,null), HttpStatus.UNAUTHORIZED);
 
         ResponseEntity responseEntity1 = this.loginController.singin(newUserDto);
 

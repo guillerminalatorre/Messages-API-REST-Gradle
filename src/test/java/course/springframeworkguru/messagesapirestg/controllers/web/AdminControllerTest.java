@@ -2,11 +2,11 @@ package course.springframeworkguru.messagesapirestg.controllers.web;
 
 import course.springframeworkguru.messagesapirestg.controllers.MessageController;
 import course.springframeworkguru.messagesapirestg.controllers.UserController;
-import course.springframeworkguru.messagesapirestg.dto.RecipientDto;
+import course.springframeworkguru.messagesapirestg.dto.HttpMessageDto;
 import course.springframeworkguru.messagesapirestg.exceptions.UserException;
 import course.springframeworkguru.messagesapirestg.models.*;
-import course.springframeworkguru.messagesapirestg.models.employees.Employee;
 import course.springframeworkguru.messagesapirestg.session.SessionManager;
+import course.springframeworkguru.messagesapirestg.utils.ObjectsFactory;
 import course.springframeworkguru.messagesapirestg.views.*;
 import org.junit.After;
 import org.junit.Assert;
@@ -44,6 +44,10 @@ public class AdminControllerTest {
 
     private AdminController adminController;
 
+    private ObjectsFactory objectsFactory = new ObjectsFactory();
+
+    private ObjectsFactory objectFactory = new ObjectsFactory();
+
     private ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
 
     @Before
@@ -61,124 +65,9 @@ public class AdminControllerTest {
         RequestContextHolder.resetRequestAttributes();
     }
 
-    private Employee createEmployee(){
-        return Employee.builder()
-                .id(1L)
-                .mailUsername("pepe")
-                .idNumber("1234567")
-                .lastName("perez")
-                .name("jose")
-                .city(null)
-                .build();
-    }
-
-    private User createUser(){
-        return User.builder()
-                .id(0)
-                .username("jose perez")
-                .isAdmin(false)
-                .isEnabled(true)
-                .password("1234")
-                .employee(createEmployee())
-                .build();
-    }
-
-    private RecipientType createRecipientType(){
-        return RecipientType.builder()
-                .id(1)
-                .name("Primary Receptor")
-                .acronym("To").build();
-    }
-
-    private Recipient createRecipient(Message message){
-        return Recipient.builder().id(1)
-                .message(message)
-                .recipientType(createRecipientType())
-                .isDeletedByRecipient(false)
-                .user(createUser())
-                .build();
-    }
-
-    private Message createMessage(){
-        Message message = Message.builder()
-                .id(0)
-                .body("Body Message")
-                .subject("Subject Message")
-                .labelXMessageList(null)
-                .isDeletedByUserFrom(false)
-                .userFrom(createUser())
-                .recipientList(null)
-                .attachmentsList(null)
-                .build();
-
-        List<Recipient> recipientList = new ArrayList<Recipient>();
-        recipientList.add(createRecipient(message));
-
-        message.setRecipientList(recipientList);
-
-        return message;
-    }
-
-    private MessageView createMessageView(){
-        Employee employee = createEmployee();
-        EmployeeView employeeView = this.factory.createProjection(EmployeeView.class);
-        employeeView.setMailUsername(employee.getMailUsername());
-
-        User user = createUser();
-        UserView userView = this.factory.createProjection(UserView.class);
-        userView.setUsername(user.getUsername());
-        userView.setEmployee(employeeView);
-
-        Message message = createMessage();
-
-        RecipientTypeView recipientTypeView = this.factory.createProjection(RecipientTypeView.class);
-        recipientTypeView.setAcronym(message.getRecipientList()
-                .get(0).getRecipientType().getAcronym());
-
-        RecipientView recipientView = this.factory.createProjection(RecipientView.class);
-        recipientView.setUser(userView);
-        recipientView.setRecipientType(recipientTypeView);
-
-        List<RecipientView> recipientViewList =  new ArrayList<RecipientView>();
-        recipientViewList.add(recipientView);
-
-        MessageView messageView = this.factory.createProjection(MessageView.class);
-        messageView.setId(message.getId());
-        messageView.setDatee(message.getDatee().toString());
-        messageView.setUserFrom(userView);
-        messageView.setAttachmentsList(null);
-        messageView.setBody(message.getBody());
-        messageView.setSubject(message.getSubject());
-        messageView.setRecipientList(recipientViewList);
-
-        return messageView;
-    }
-
-    private RecipientDto createRecipientDto(){
-        return RecipientDto.builder().acronymRecipientType("To").mailUsername("pepe").build();
-    }
-
-    private Label createLabel(){
-        return Label.builder()
-                .id(0)
-                .name("Work")
-                .isEnabled(true)
-                .user(createUser())
-                .build();
-    }
-
-    private LabelView createLabelView(){
-        Label label = createLabel();
-        LabelView labelView = this.factory.createProjection(LabelView.class);
-        labelView.setName(label.getName());
-        labelView.setId(label.getId());
-
-        return labelView;
-    }
-
     @Test
-    public void getInfo() throws UserException {
-        User user = createUser();
+    public void getInfoOk() throws UserException {
+        User user = objectsFactory.createUser();
         when(sessionManager.getCurrentUser("1234")).thenReturn(user);
 
         ResponseEntity responseEntity = ResponseEntity.ok(user);
@@ -188,14 +77,22 @@ public class AdminControllerTest {
         Assert.assertEquals(responseEntity, responseEntity1);
     }
 
+    @Test(expected = UserException.class)
+    public void getInfoFail() throws UserException {
+        User user = objectsFactory.createUser();
+        when(sessionManager.getCurrentUser("1234")).thenReturn(null);
+
+        ResponseEntity responseEntity1 = this.adminController.getInfo("1234");
+    }
+
     @Test
-    public void sentByUserFrom() {
-        User user = createUser();
+    public void sentByUserFromOk() {
+        User user = objectsFactory.createUser();
         when(sessionManager.getCurrentUser("1234")).thenReturn(user);
 
-        Message message = createMessage();
+        Message message = objectsFactory.createMessage();
 
-        MessageView messageView = createMessageView();
+        MessageView messageView = objectsFactory.createMessageView();
 
         List<MessageView> messageViewList =  new ArrayList<MessageView>();
         messageViewList.add(messageView);
@@ -214,13 +111,25 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void inboxByRecipientId() {
-        User user = createUser();
+    public void sentByUserFromFail() {
+        User user = objectsFactory.createUser();
+        when(sessionManager.getCurrentUser("1234")).thenReturn(null);
+
+        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        ResponseEntity responseEntity1 = this.adminController.sentByUserFrom("1234", user.getId(), PageRequest.of(0,1));
+
+        Assert.assertEquals(responseEntity, responseEntity1);
+    }
+
+    @Test
+    public void inboxByRecipientIdOk() {
+        User user = objectsFactory.createUser();
         when(sessionManager.getCurrentUser("1234")).thenReturn(user);
 
-        Message message = createMessage();
+        Message message = objectsFactory.createMessage();
 
-        MessageView messageView = createMessageView();
+        MessageView messageView = objectsFactory.createMessageView();
 
         List<MessageView> messageViewList =  new ArrayList<MessageView>();
         messageViewList.add(messageView);
@@ -239,8 +148,20 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void makeAdmin() throws UserException, URISyntaxException {
-        User user = createUser();
+    public void inboxByRecipientIdFail() {
+        User user = objectsFactory.createUser();
+        when(sessionManager.getCurrentUser("1234")).thenReturn(null);
+
+        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        ResponseEntity responseEntity1 = this.adminController.inboxByRecipientId("1234", user.getId(),PageRequest.of(0,1));
+
+        Assert.assertEquals(responseEntity, responseEntity1);
+    }
+
+    @Test
+    public void makeAdminOk() throws UserException, URISyntaxException {
+        User user = objectsFactory.createUser();
         when(sessionManager.getCurrentUser("1234")).thenReturn(user);
 
         user.setAdmin(true);
@@ -255,13 +176,67 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void deleteUser() throws UserException {
-        User user = createUser();
+    public void makeAdminFail1() {
+        User user = objectsFactory.createUser();
+        when(sessionManager.getCurrentUser("1234")).thenReturn(null);
+
+        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        ResponseEntity responseEntity1 = this.adminController.makeAdmin(user.getId(),true,"1234");
+
+        Assert.assertEquals(responseEntity, responseEntity1);
+    }
+
+    @Test
+    public void makeAdminFail2() throws UserException {
+        User user = objectsFactory.createUser();
+        when(sessionManager.getCurrentUser("1234")).thenReturn(user);
+
+        user.setAdmin(true);
+
+        ResponseEntity responseEntity = new ResponseEntity(new HttpMessageDto(null,null), HttpStatus.BAD_REQUEST);
+
+        when(this.userController.makeAdmin(user.getId(),true)).thenThrow(UserException.class);
+
+        ResponseEntity responseEntity1 = this.adminController.makeAdmin(user.getId(),true,"1234");
+
+        Assert.assertEquals(responseEntity,responseEntity1);
+    }
+
+    @Test
+    public void deleteUserOk() throws UserException {
+        User user = objectsFactory.createUser();
         when(sessionManager.getCurrentUser("1234")).thenReturn(user);
 
         ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
 
         when(this.userController.delete(user.getId())).thenReturn(user);
+
+        ResponseEntity responseEntity1 = this.adminController.deleteUser(user.getId(), "1234");
+
+        Assert.assertEquals(responseEntity,responseEntity1);
+    }
+
+    @Test
+    public void deleteUserFail1() {
+        User user = objectsFactory.createUser();
+        when(sessionManager.getCurrentUser("1234")).thenReturn(null);
+
+        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        ResponseEntity responseEntity1 = this.adminController.deleteUser(user.getId(), "1234");
+
+        Assert.assertEquals(responseEntity, responseEntity1);
+    }
+
+    @Test
+    public void deleteUserFail2() throws UserException {
+        User user = objectsFactory.createUser();
+        when(sessionManager.getCurrentUser("1234")).thenReturn(user);
+
+        ResponseEntity responseEntity = new ResponseEntity(new HttpMessageDto(null,null), HttpStatus.BAD_REQUEST);
+
+        when(this.userController.delete(user.getId())).thenThrow(UserException.class);
 
         ResponseEntity responseEntity1 = this.adminController.deleteUser(user.getId(), "1234");
 

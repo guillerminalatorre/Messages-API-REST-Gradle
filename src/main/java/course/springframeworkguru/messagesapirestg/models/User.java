@@ -1,14 +1,12 @@
 package course.springframeworkguru.messagesapirestg.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import course.springframeworkguru.messagesapirestg.models.employees.Employee;
 
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Getter
 @Setter

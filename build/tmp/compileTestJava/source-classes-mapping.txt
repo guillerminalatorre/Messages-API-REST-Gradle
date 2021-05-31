@@ -1,3 +1,7 @@
+course/springframeworkguru/messagesapirestg/utils/ObjectsFactory.java
+ course.springframeworkguru.messagesapirestg.utils.ObjectsFactory
+course/springframeworkguru/messagesapirestg/repositories/UserRepositoryIT.java
+ course.springframeworkguru.messagesapirestg.repositories.UserRepositoryIT
 course/springframeworkguru/messagesapirestg/controllers/MessageControllerTest.java
  course.springframeworkguru.messagesapirestg.controllers.MessageControllerTest
 course/springframeworkguru/messagesapirestg/controllers/LabelControllerTest.java
@@ -14,7 +18,7 @@ course/springframeworkguru/messagesapirestg/services/LabelXMessageServiceTest.ja
  course.springframeworkguru.messagesapirestg.services.LabelXMessageServiceTest
 course/springframeworkguru/messagesapirestg/MessagesApiRestGApplicationTests.java
  course.springframeworkguru.messagesapirestg.MessagesApiRestGApplicationTests
-course/springframeworkguru/messagesapirestg/controllers/web/ClientControllerTest.java
- course.springframeworkguru.messagesapirestg.controllers.web.ClientControllerTest
 course/springframeworkguru/messagesapirestg/controllers/web/LoginControllerTest.java
  course.springframeworkguru.messagesapirestg.controllers.web.LoginControllerTest
+course/springframeworkguru/messagesapirestg/controllers/web/ClientControllerTest.java
+ course.springframeworkguru.messagesapirestg.controllers.web.ClientControllerTest

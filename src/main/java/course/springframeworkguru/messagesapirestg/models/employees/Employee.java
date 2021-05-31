@@ -12,6 +12,7 @@ import java.io.Serializable;
 @Builder
 @Entity
 @ToString
+@EqualsAndHashCode
 @Table(name = "employees")
 public class Employee  implements Serializable {
     @Id

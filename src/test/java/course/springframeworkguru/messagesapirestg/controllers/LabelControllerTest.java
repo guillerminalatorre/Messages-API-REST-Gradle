@@ -6,14 +6,16 @@ import course.springframeworkguru.messagesapirestg.models.Label;
 import course.springframeworkguru.messagesapirestg.models.LabelXMessage;
 import course.springframeworkguru.messagesapirestg.models.Message;
 import course.springframeworkguru.messagesapirestg.models.User;
-import course.springframeworkguru.messagesapirestg.models.employees.Employee;
 import course.springframeworkguru.messagesapirestg.services.LabelXMessageService;
+import course.springframeworkguru.messagesapirestg.utils.ObjectsFactory;
 import course.springframeworkguru.messagesapirestg.views.LabelView;
 import course.springframeworkguru.messagesapirestg.views.LabelXMessageView;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 
@@ -31,6 +33,8 @@ public class LabelControllerTest {
     private LabelController labelController;
 
     private ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
+    
+    private ObjectsFactory objectsFactory =  new ObjectsFactory();
 
     @Before
     public void setUp() throws Exception {
@@ -38,88 +42,14 @@ public class LabelControllerTest {
         this.labelController = new LabelController(labelXMessageService);
     }
 
-    private Employee createEmployee(){
-        return Employee.builder()
-                .id(1L)
-                .mailUsername("pepe")
-                .idNumber("1234567")
-                .lastName("perez")
-                .name("jose")
-                .city(null)
-                .build();
-    }
-
-    private User createUser(){
-        return User.builder()
-                .id(0)
-                .username("jose perez")
-                .isAdmin(false)
-                .isEnabled(true)
-                .password("1234")
-                .employee(createEmployee())
-                .build();
-    }
-
-    private Message createMessage(){
-        return Message.builder()
-                .id(0)
-                .body("Body Message")
-                .subject("Subject Message")
-                .labelXMessageList(null)
-                .isDeletedByUserFrom(false)
-                .userFrom(createUser())
-                .recipientList(null)
-                .attachmentsList(null)
-                .recipientList(null)
-                .build();
-    }
-
-    private Label createLabel(){
-        return Label.builder()
-                .id(0)
-                .name("Work")
-                .isEnabled(true)
-                .user(createUser())
-                .build();
-    }
-
-    private LabelXMessage createLabelXMessage(){
-        return LabelXMessage.builder()
-                .id(0)
-                .user(createUser())
-                .label(createLabel())
-                .message(createMessage())
-                .build();
-    }
-
-    private LabelView createLabelView(){
-        Label label = createLabel();
-        LabelView labelView = this.factory.createProjection(LabelView.class);
-        labelView.setName(label.getName());
-        labelView.setId(label.getId());
-
-        return labelView;
-    }
-
-    private LabelXMessageView createLabelXMessageView(){
-        LabelXMessageView labelXMessageView = this.factory.createProjection(LabelXMessageView.class);
-        labelXMessageView.setLabel(createLabelView());
-
-        return labelXMessageView;
-    }
-
-    private NewLabelDto createNewLabelDto(){
-        return NewLabelDto.builder().name("Work").build();
-    }
-
     @Test
     public void findLabelsByMessageId() {
 
-        Message message = createMessage();
-        User user = createUser();
+        Message message = objectsFactory.createMessage();
+        User user = objectsFactory.createUser();
 
         List<LabelXMessageView> labels = new ArrayList<LabelXMessageView>();
-        labels.add(createLabelXMessageView());
+        labels.add(objectsFactory.createLabelXMessageView());
 
         when(this.labelXMessageService.findLabelsByMessageIdAndUserId(message.getId(), user.getId())).thenReturn(labels);
 
@@ -130,10 +60,10 @@ public class LabelControllerTest {
 
     @Test
     public void findLabelsByUserId() {
-        User user = createUser();
+        User user = objectsFactory.createUser();
 
         List<LabelView> labels = new ArrayList<LabelView>();
-        labels.add(createLabelView());
+        labels.add(objectsFactory.createLabelView());
 
         when(this.labelXMessageService.findLabelsByUser(user.getId())).thenReturn(labels);
 
@@ -145,14 +75,14 @@ public class LabelControllerTest {
     @Test
     public void createNewLabelOk() throws LabelException {
 
-        NewLabelDto newLabelDto = createNewLabelDto();
-        User user = createUser();
+        NewLabelDto newLabelDto = objectsFactory.createNewLabelDto();
+        User user = objectsFactory.createUser();
 
-        Label auxLabel = createLabel();
+        Label auxLabel = objectsFactory.createLabel();
         auxLabel.setName(newLabelDto.getName());
         auxLabel.setUser(user);
 
-        Label label = createLabel();
+        Label label = objectsFactory.createLabel();
 
         when(this.labelXMessageService.saveNewLabel(newLabelDto, user)).thenReturn(label);
 
@@ -164,8 +94,8 @@ public class LabelControllerTest {
     @Test(expected = LabelException.class)
     public void createNewLabelFail() throws LabelException {
 
-        NewLabelDto newLabelDto = createNewLabelDto();
-        User user = createUser();
+        NewLabelDto newLabelDto = objectsFactory.createNewLabelDto();
+        User user = objectsFactory.createUser();
 
         when(this.labelXMessageService.saveNewLabel(newLabelDto, user)).thenThrow(LabelException.class);
 
@@ -175,10 +105,10 @@ public class LabelControllerTest {
     @Test
     public void assignLabelToMessageOk() throws LabelException {
 
-        Label label = createLabel();
-        Message message = createMessage();
-        User user = createUser();
-        LabelXMessage labelXMessage = createLabelXMessage();
+        Label label = objectsFactory.createLabel();
+        Message message = objectsFactory.createMessage();
+        User user = objectsFactory.createUser();
+        LabelXMessage labelXMessage = objectsFactory.createLabelXMessage();
 
         when(this.labelXMessageService.assignLabelToMessage(message.getId(), label.getId(), user)).thenReturn(labelXMessage);
 
@@ -190,10 +120,10 @@ public class LabelControllerTest {
     @Test(expected = LabelException.class)
     public void assignLabelToMessageFail() throws LabelException {
 
-        Label label = createLabel();
-        Message message = createMessage();
-        User user = createUser();
-        LabelXMessage labelXMessage = createLabelXMessage();
+        Label label = objectsFactory.createLabel();
+        Message message = objectsFactory.createMessage();
+        User user = objectsFactory.createUser();
+        LabelXMessage labelXMessage = objectsFactory.createLabelXMessage();
 
         when(this.labelXMessageService.assignLabelToMessage(message.getId(), label.getId(), user)).thenThrow(LabelException.class);
 
@@ -202,7 +132,7 @@ public class LabelControllerTest {
 
     @Test
     public void deleteOk() throws LabelException {
-        Label label = createLabel();
+        Label label = objectsFactory.createLabel();
         label.setEnabled(false);
 
         when(this.labelXMessageService.delete(label.getId())).thenReturn(label);
@@ -214,7 +144,7 @@ public class LabelControllerTest {
 
     @Test(expected = LabelException.class)
     public void deleteFail() throws LabelException {
-        Label label = createLabel();
+        Label label = objectsFactory.createLabel();
         label.setEnabled(false);
 
         when(this.labelXMessageService.delete(label.getId())).thenThrow(LabelException.class);

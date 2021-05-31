@@ -5,10 +5,10 @@ import course.springframeworkguru.messagesapirestg.dto.NewUserDto;
 import course.springframeworkguru.messagesapirestg.exceptions.LoginException;
 import course.springframeworkguru.messagesapirestg.exceptions.UserException;
 import course.springframeworkguru.messagesapirestg.models.User;
-import course.springframeworkguru.messagesapirestg.models.employees.City;
 import course.springframeworkguru.messagesapirestg.models.employees.Employee;
 import course.springframeworkguru.messagesapirestg.services.UserService;
 import course.springframeworkguru.messagesapirestg.session.SessionManager;
+import course.springframeworkguru.messagesapirestg.utils.ObjectsFactory;
 import course.springframeworkguru.messagesapirestg.views.EmployeeView;
 import course.springframeworkguru.messagesapirestg.views.UserView;
 import org.junit.Assert;
@@ -29,6 +29,8 @@ public class UserControllerTest {
 
     private UserController userController;
 
+    private ObjectsFactory objectsFactory = new ObjectsFactory();
+
     private ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
 
     @Before
@@ -36,45 +38,11 @@ public class UserControllerTest {
         initMocks(this);
         this.userController = new UserController(userService);
     }
-
-    private LoginDto createLoginDto(){
-        return new LoginDto("pepe", "1234");
-    }
-
-    private NewUserDto createNewUserDto(){
-        return NewUserDto.builder()
-                .username("jose perez")
-                .mailUsername("pepe")
-                .password("1234")
-                .build();
-    }
-
-    private Employee createEmployee(){
-        return Employee.builder()
-                .id(1L)
-                .mailUsername("pepe")
-                .idNumber("1234567")
-                .lastName("perez")
-                .name("jose")
-                .city(new City())
-                .build();
-    }
-
-    private User createUser(){
-        return User.builder()
-                .id(0)
-                .username("jose perez")
-                .isAdmin(false)
-                .isEnabled(true)
-                .password("1234")
-                .employee(createEmployee())
-                .build();
-    }
-
+    
     @Test
     public void loginOk() throws UserException, LoginException {
-        User user = createUser();
-        LoginDto loginDto = createLoginDto();
+        User user = objectsFactory.createUser();
+        LoginDto loginDto = objectsFactory.createLoginDto();
 
         SessionManager sessionManager = new SessionManager();
 
@@ -87,8 +55,8 @@ public class UserControllerTest {
 
     @Test(expected = LoginException.class)
     public void loginFail1() throws UserException, LoginException {
-        User user = createUser();
-        LoginDto loginDto = createLoginDto();
+        User user = objectsFactory.createUser();
+        LoginDto loginDto = objectsFactory.createLoginDto();
 
         SessionManager sessionManager = new SessionManager();
         sessionManager.createSession(user);
@@ -100,8 +68,8 @@ public class UserControllerTest {
 
     @Test(expected = UserException.class)
     public void loginFail() throws UserException, LoginException {
-        User user = createUser();
-        LoginDto loginDto = createLoginDto();
+        User user = objectsFactory.createUser();
+        LoginDto loginDto = objectsFactory.createLoginDto();
 
         SessionManager sessionManager = new SessionManager();
         sessionManager.createSession(user);
@@ -113,8 +81,8 @@ public class UserControllerTest {
 
     @Test
     public void singInOk() throws UserException {
-        User user = createUser();
-        NewUserDto newUserDto = createNewUserDto();
+        User user = objectsFactory.createUser();
+        NewUserDto newUserDto = objectsFactory.createNewUserDto();
 
         when(this.userService.save(newUserDto)).thenReturn(user);
 
@@ -125,8 +93,8 @@ public class UserControllerTest {
 
     @Test(expected = UserException.class)
     public void singInOFail() throws UserException {
-        User user = createUser();
-        NewUserDto newUserDto = createNewUserDto();
+        User user = objectsFactory.createUser();
+        NewUserDto newUserDto = objectsFactory.createNewUserDto();
 
         when(this.userService.save(newUserDto)).thenThrow(UserException.class);
 
@@ -135,8 +103,8 @@ public class UserControllerTest {
 
     @Test
     public void updateOk() throws UserException {
-        User user = createUser();
-        NewUserDto newUserDto = createNewUserDto();
+        User user = objectsFactory.createUser();
+        NewUserDto newUserDto = objectsFactory.createNewUserDto();
 
         when(this.userService.update(newUserDto)).thenReturn(user);
 
@@ -147,8 +115,8 @@ public class UserControllerTest {
 
     @Test(expected = UserException.class)
     public void updateFail() throws UserException {
-        User user = createUser();
-        NewUserDto newUserDto = createNewUserDto();
+        User user = objectsFactory.createUser();
+        NewUserDto newUserDto = objectsFactory.createNewUserDto();
 
         when(this.userService.update(newUserDto)).thenThrow(UserException.class);
 
@@ -157,7 +125,7 @@ public class UserControllerTest {
 
     @Test
     public void makeAdminOk() throws UserException {
-        User user = createUser();
+        User user = objectsFactory.createUser();
 
         when(this.userService.changeAdminStatus(0,false)).thenReturn(user);
 
@@ -168,7 +136,7 @@ public class UserControllerTest {
 
     @Test(expected = UserException.class)
     public void makeAdminFail() throws UserException {
-        User user = createUser();
+        User user = objectsFactory.createUser();
 
         when(this.userService.changeAdminStatus(0,false)).thenThrow(UserException.class);
 
@@ -177,11 +145,11 @@ public class UserControllerTest {
 
     @Test
     public void findByMailUsernameLike() {
-        Employee employee = createEmployee();
+        Employee employee = objectsFactory.createEmployee();
         EmployeeView employeeView = this.factory.createProjection(EmployeeView.class);
         employeeView.setMailUsername(employee.getMailUsername());
 
-        User user = createUser();
+        User user = objectsFactory.createUser();
         UserView userView = this.factory.createProjection(UserView.class);
         userView.setUsername(user.getUsername());
         userView.setEmployee(employeeView);
@@ -199,11 +167,11 @@ public class UserControllerTest {
 
     @Test
     public void findAll() {
-        Employee employee = createEmployee();
+        Employee employee = objectsFactory.createEmployee();
         EmployeeView employeeView = this.factory.createProjection(EmployeeView.class);
         employeeView.setMailUsername(employee.getMailUsername());
 
-        User user = createUser();
+        User user = objectsFactory.createUser();
         UserView userView = this.factory.createProjection(UserView.class);
         userView.setUsername(user.getUsername());
         userView.setEmployee(employeeView);
@@ -221,7 +189,7 @@ public class UserControllerTest {
 
     @Test
     public void deleteOk() throws UserException {
-        User user = createUser();
+        User user = objectsFactory.createUser();
         user.setEnabled(false);
 
         when(this.userService.delete(user.getId())).thenReturn(user);
@@ -233,7 +201,7 @@ public class UserControllerTest {
 
     @Test(expected = UserException.class)
     public void deleteFail() throws UserException {
-        User user = createUser();
+        User user = objectsFactory.createUser();
         user.setEnabled(false);
 
         when(this.userService.delete(user.getId())).thenThrow(UserException.class);
