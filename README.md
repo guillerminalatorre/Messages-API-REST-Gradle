@@ -44,6 +44,11 @@ To install dependencies:
 ```sh
 cd repository_location
 gradlew build
+```
+
+To run:
+```sh
+cd repository_location
 gradlew bootRun
 ```
 
@@ -53,5 +58,5 @@ cd (repository_location)
 gradlew test
 gradlew jacocoTestCoverageVerification
 ```
-Check build/reports/jacoco/test/html/index.html to see Jacoco report.
+Check build/reports/jacoco/test/html/index.html to see Jacoco's report.
 
