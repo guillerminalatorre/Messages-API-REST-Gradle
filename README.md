@@ -43,14 +43,15 @@ Create local PostgreSQL database and configure src/main/resources/application.pr
 To install dependencies:
 ```sh
 cd repository_location
-gradle build
+gradlew build
+gradlew bootRun
 ```
 
 ## Testing
 ```sh
 cd (repository_location)
-gradle test
-gradle jacocoTestCoverageVerification
+gradlew test
+gradlew jacocoTestCoverageVerification
 ```
 Check build/reports/jacoco/test/html/index.html to see Jacoco report.
 
