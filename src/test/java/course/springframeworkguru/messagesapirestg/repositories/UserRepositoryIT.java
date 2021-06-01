@@ -1,8 +1,6 @@
 package course.springframeworkguru.messagesapirestg.repositories;
 import course.springframeworkguru.messagesapirestg.models.User;
-import course.springframeworkguru.messagesapirestg.models.employees.Employee;
 import course.springframeworkguru.messagesapirestg.utils.ObjectsFactory;
-import course.springframeworkguru.messagesapirestg.views.EmployeeView;
 import course.springframeworkguru.messagesapirestg.views.UserView;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,8 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.projection.ProjectionFactory;
-import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
