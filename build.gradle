@@ -17,6 +17,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-gradle-plugin:2.4.5'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.session:spring-session-core'
@@ -117,4 +118,3 @@ sourceSets {
 		java.srcDir file('src/test/java/**/.java')
 	}
 }
-
