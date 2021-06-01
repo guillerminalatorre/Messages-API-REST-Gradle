@@ -20,11 +20,14 @@ services:
        - SPRING_JPA_HIBERNATE_DDL_AUTO=update
   db:
     image: 'postgres:latest'
+    volumes:
+      - ./schema/:/docker-entrypoint-initdb.d/
     container_name: db
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=messages_gradle
 
+
 #TODO
-#al inciar el contenedor cargar los datos del script data.sql
+#al iniciar el contenedor cargar los datos del script data.sql
