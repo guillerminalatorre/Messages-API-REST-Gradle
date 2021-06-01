@@ -46,10 +46,16 @@ cd repository_location
 gradlew build
 ```
 
-To run:
+### To run:
 ```sh
 cd repository_location
 gradlew bootRun
+```
+## Docker
+
+```sh
+gradlew build
+dockekr compose up
 ```
 
 ## Testing
