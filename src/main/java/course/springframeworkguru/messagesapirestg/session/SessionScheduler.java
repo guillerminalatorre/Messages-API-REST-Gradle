@@ -10,8 +10,12 @@ import org.springframework.stereotype.Component;
 @EnableAsync
 public class SessionScheduler {
 
+    private final SessionManager sessionManager;
+
     @Autowired
-    SessionManager sessionManager;
+    public SessionScheduler(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
 
     @Async
     @Scheduled(fixedRate = 300000)

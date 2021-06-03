@@ -12,6 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @Entity
+@EqualsAndHashCode
 @Table(name = "labels_x_messages")
 public class LabelXMessage implements Serializable {
 

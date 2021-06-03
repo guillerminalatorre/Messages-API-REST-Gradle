@@ -1,13 +1,14 @@
 package course.springframeworkguru.messagesapirestg.services;
 
-import course.springframeworkguru.messagesapirestg.dto.output.LoginDto;
-import course.springframeworkguru.messagesapirestg.dto.input.NewUserDto;
+import course.springframeworkguru.messagesapirestg.dto.LoginDto;
+import course.springframeworkguru.messagesapirestg.dto.NewUserDto;
 import course.springframeworkguru.messagesapirestg.exceptions.UserException;
 import course.springframeworkguru.messagesapirestg.models.User;
 import course.springframeworkguru.messagesapirestg.models.employees.Employee;
 import course.springframeworkguru.messagesapirestg.repositories.EmployeeRepository;
 import course.springframeworkguru.messagesapirestg.repositories.UserRepository;
 import course.springframeworkguru.messagesapirestg.utils.Hash;
+import course.springframeworkguru.messagesapirestg.views.UserView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class UserService {
 
         if(user != null){
 
-            if( (Hash.getHash(loginDto.getPassword())).equals( user.getPassword() )){
+            if( loginDto.getPassword().equals( user.getPassword() )){
 
                 return user;
             }
@@ -56,6 +57,7 @@ public class UserService {
                 user.setEmployee(employee);
                 user.setUsername(newUserDto.getUsername());
                 user.setPassword(Hash.getHash(newUserDto.getPassword()));
+                user.setEnabled(true);
 
                 this.userRepository.save(user);
 
@@ -74,13 +76,17 @@ public class UserService {
 
             User user = this.userRepository.findByEmployeeMailUsernameAndIsEnabledTrue(newUserDto.getMailUsername());
 
-            user.setEmployee(employee);
-            user.setUsername(newUserDto.getUsername());
-            user.setPassword(Hash.getHash(newUserDto.getPassword()));
+            if(user != null) {
 
-            this.userRepository.save(user);
+                user.setEmployee(employee);
+                user.setUsername(newUserDto.getUsername());
+                user.setPassword(Hash.getHash(newUserDto.getPassword()));
 
-            return user;
+                this.userRepository.save(user);
+
+                return user;
+
+            }else throw new UserException("Update User Error", "No one User mail username is : " + newUserDto.getMailUsername());
         }
         else throw new UserException("Update User Error", "No one Employee mail username is : " + newUserDto.getMailUsername());
     }
@@ -89,7 +95,7 @@ public class UserService {
 
         User user = this.userRepository.findByIdAndIsEnabledTrue(id);
 
-        if( user != null ){
+        if( user != null && user.isEnabled() == true){
 
             user.setAdmin(status);
 
@@ -100,12 +106,12 @@ public class UserService {
         else  throw new UserException("Update User Error", "Invalid User Id");
     }
 
-    public List<User> findByMailUsernameLike(String username){
+    public List<UserView> findByMailUsernameLike(String username){
 
         return this.userRepository.findByEmployeeMailUsernameLikeAndIsEnabledTrue("%"+username+"%");
     }
 
-    public List<User> findAll() {
+    public List<UserView> findAll() {
 
         return this.userRepository.findByIsEnabledTrue();
     }
@@ -124,6 +130,7 @@ public class UserService {
         }
         else throw new UserException("Delete User Error", "Invalid User Id");
     }
+
 }
 
 

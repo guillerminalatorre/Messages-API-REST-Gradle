@@ -1,5 +1,6 @@
 package course.springframeworkguru.messagesapirestg.session;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,12 @@ import java.io.IOException;
 @Service
 public class SessionFilter extends OncePerRequestFilter {
 
+    private final SessionManager sessionManager;
+
     @Autowired
-    private SessionManager sessionManager;
+    public SessionFilter(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

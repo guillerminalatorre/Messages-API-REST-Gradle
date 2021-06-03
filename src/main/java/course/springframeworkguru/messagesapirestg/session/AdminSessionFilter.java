@@ -13,8 +13,13 @@ import java.io.IOException;
 
 @Service
 public class AdminSessionFilter extends OncePerRequestFilter {
+
+    private final SessionManager sessionManager;
+
     @Autowired
-    private SessionManager sessionManager;
+    public AdminSessionFilter(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
