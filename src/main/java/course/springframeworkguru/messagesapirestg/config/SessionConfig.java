@@ -11,13 +11,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @org.springframework.context.annotation.Configuration
 @PropertySource("application.properties")
 @EnableScheduling
-public class Configuration {
+public class SessionConfig {
 
     private final SessionFilter sessionFilter;
     private final AdminSessionFilter adminSessionFilter;
 
     @Autowired
-    public Configuration(SessionFilter sessionFilter, AdminSessionFilter adminSessionFilter) {
+    public SessionConfig(SessionFilter sessionFilter, AdminSessionFilter adminSessionFilter) {
         this.sessionFilter = sessionFilter;
         this.adminSessionFilter = adminSessionFilter;
     }
