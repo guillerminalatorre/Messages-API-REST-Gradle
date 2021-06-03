@@ -9,10 +9,8 @@ import course.springframeworkguru.messagesapirestg.services.UserService;
 import course.springframeworkguru.messagesapirestg.session.SessionManager;
 import course.springframeworkguru.messagesapirestg.views.UserView;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -30,7 +28,7 @@ public class UserController {
             User user = this.userService.login(loginDto);
 
             if(sessionManager.userIsLogged(user)){
-                return (User) Optional.ofNullable(null).orElseThrow(() -> new LoginException("Invalid Login","This user is already logged"));
+                throw new LoginException("Invalid Login","This user is already logged");
             }
             else {
                 return user;
