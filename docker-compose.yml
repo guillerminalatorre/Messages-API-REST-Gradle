@@ -27,7 +27,3 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=messages_gradle
-
-
-#TODO
-#al iniciar el contenedor cargar los datos del script data.sql
