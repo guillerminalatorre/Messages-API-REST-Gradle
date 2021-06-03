@@ -14,6 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @Entity
+@EqualsAndHashCode
 @Table(name = "labels")
 public class Label  implements Serializable {
 
@@ -26,6 +27,7 @@ public class Label  implements Serializable {
     private String name;
 
     @Column(name = "enabled", columnDefinition = "boolean default true")
+    @JsonIgnore
     private boolean isEnabled;
 
     @ManyToOne

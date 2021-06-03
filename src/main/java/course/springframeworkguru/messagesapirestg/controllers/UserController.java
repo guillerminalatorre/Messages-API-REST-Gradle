@@ -1,22 +1,18 @@
 package course.springframeworkguru.messagesapirestg.controllers;
 
-import course.springframeworkguru.messagesapirestg.dto.HttpMessageDto;
-import course.springframeworkguru.messagesapirestg.dto.output.LoginDto;
-import course.springframeworkguru.messagesapirestg.dto.input.NewUserDto;
+import course.springframeworkguru.messagesapirestg.dto.LoginDto;
+import course.springframeworkguru.messagesapirestg.dto.NewUserDto;
+import course.springframeworkguru.messagesapirestg.exceptions.LoginException;
 import course.springframeworkguru.messagesapirestg.exceptions.UserException;
 import course.springframeworkguru.messagesapirestg.models.User;
 import course.springframeworkguru.messagesapirestg.services.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import course.springframeworkguru.messagesapirestg.session.SessionManager;
+import course.springframeworkguru.messagesapirestg.views.UserView;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @Controller
-@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -26,111 +22,48 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginDto loginDto) {
 
-        try {
+    public User login(LoginDto loginDto, SessionManager sessionManager) throws LoginException, UserException {
+
             User user = this.userService.login(loginDto);
 
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(user.getId())
-                    .toUri();
+            if(sessionManager.userIsLogged(user)){
+                throw new LoginException("Invalid Login","This user is already logged");
+            }
+            else {
+                return user;
+            }
 
-            return ResponseEntity.created(location).build();
-        }
-        catch(UserException userException) {
-            return new ResponseEntity(new HttpMessageDto(userException.getMessage(), userException.getDetails()), HttpStatus.UNAUTHORIZED);
-        }
     }
 
-    @PostMapping("/")
-    public ResponseEntity singIn(@RequestBody NewUserDto newUserDto){
+    public User singIn(NewUserDto newUserDto) throws UserException {
 
-        try {
-            User user = this.userService.save(newUserDto);
-
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(user.getId())
-                    .toUri();
-
-            return ResponseEntity.created(location).build();
-        }
-        catch(UserException userException) {
-            return new ResponseEntity(new HttpMessageDto(userException.getMessage(), userException.getDetails()), HttpStatus.UNAUTHORIZED);
-        }
+        return this.userService.save(newUserDto);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity update(@RequestBody NewUserDto newUserDto){
+    public User update(NewUserDto newUserDto) throws UserException {
 
-        try {
-            User user = this.userService.update(newUserDto);
-
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(user.getId())
-                    .toUri();
-
-            return ResponseEntity.created(location).build();
-        }
-        catch(UserException userException) {
-            return new ResponseEntity(new HttpMessageDto(userException.getMessage(), userException.getDetails()), HttpStatus.BAD_REQUEST);
-        }
+        return this.userService.update(newUserDto);
     }
 
-    @PutMapping("/{id}/admin")
-    public ResponseEntity makeAdmin(@PathVariable int id, @RequestParam("status") boolean status){
-        try {
-            User user = this.userService.changeAdminStatus(id, status);
+    public User makeAdmin(int id, boolean status) throws UserException {
 
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(user.getId())
-                    .toUri();
-
-            return ResponseEntity.created(location).build();
-        }
-        catch(UserException userException) {
-            return new ResponseEntity(new HttpMessageDto(userException.getMessage(), userException.getDetails()), HttpStatus.UNAUTHORIZED);
-        }
+        return this.userService.changeAdminStatus(id, status);
     }
 
-    @GetMapping("/mailUsername/{mailUsername}")
-    public ResponseEntity findByMailUsernameLike(@PathVariable String mailUsername){
 
-        List<User> users = this.userService.findByMailUsernameLike(mailUsername);
+    public List<UserView> findByMailUsernameLike(String mailUsername){
 
-        if (users != null) return new ResponseEntity(users, HttpStatus.OK);
-
-        else return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return this.userService.findByMailUsernameLike(mailUsername);
     }
 
-    @GetMapping("/")
-    public ResponseEntity findAll(){
+    public List<UserView> findAll(){
 
-        List<User> users = this.userService.findAll();
-
-        if (users != null) return new ResponseEntity(users, HttpStatus.OK);
-
-        else return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return this.userService.findAll();
     }
 
-    @DeleteMapping("/")
-    public ResponseEntity deleteUser(@RequestParam("user") int idUser){
+    public User delete(int idUser) throws UserException {
 
-        try{
-            User user = this.userService.delete(idUser);
-
-            return new ResponseEntity(HttpStatus.OK);
-
-        }catch (UserException userException){
-            return new ResponseEntity(new HttpMessageDto(userException.getMessage(), userException.getDetails()), HttpStatus.BAD_REQUEST);
-        }
+        return this.userService.delete(idUser);
     }
 }

@@ -1,13 +1,14 @@
 package course.springframeworkguru.messagesapirestg.services;
 
-import course.springframeworkguru.messagesapirestg.dto.output.LabelDto;
-import course.springframeworkguru.messagesapirestg.dto.input.NewLabelDto;
+import course.springframeworkguru.messagesapirestg.dto.LabelDto;
+import course.springframeworkguru.messagesapirestg.dto.NewLabelDto;
 import course.springframeworkguru.messagesapirestg.exceptions.LabelException;
 import course.springframeworkguru.messagesapirestg.models.*;
 import course.springframeworkguru.messagesapirestg.repositories.*;
+import course.springframeworkguru.messagesapirestg.views.LabelView;
+import course.springframeworkguru.messagesapirestg.views.LabelXMessageView;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,72 +31,42 @@ public class LabelXMessageService {
     }
 
 
-    public List<LabelDto> findLabelsByMessageIdAndUserId(int idMessage, int idUser) {
+    public List<LabelXMessageView> findLabelsByMessageIdAndUserId(int idMessage, int idUser) {
 
-        List<LabelXMessage> labelsMessage= this.labelXMessageRepository.findByMessageIdAndUserIdAndLabelIsEnabledTrue(idMessage, idUser);
+        List<LabelXMessageView> labels= this.labelXMessageRepository.findByMessageIdAndUserIdAndLabelIsEnabledTrue(idMessage, idUser);
 
-        if (!labelsMessage.isEmpty()) {
-
-            List<LabelDto> labels = new ArrayList<LabelDto>();
-
-            if (!labelsMessage.isEmpty()) {
-
-                for (LabelXMessage labelXMessage : labelsMessage) {
-
-                    LabelDto label = new LabelDto();
-
-                    label.setIdLabel(labelXMessage .getLabel().getId());
-                    label.setName(labelXMessage .getLabel().getName());
-
-                    labels.add(label);
-                }
-            }
-            return labels;
-
-        } else return null;
-
-    }
-    public List<LabelDto> findLabelsByUser(int id){
-
-        List<Label> labels =  this.labelRepository.findByIsEnabledTrueAndUserIdOrUserId(id, null);
-
-        if (!labels.isEmpty()) {
-
-            List<LabelDto> labelsDefault = new ArrayList<LabelDto>();
-
-            for (Label label : labels) {
-
-                LabelDto aux = new LabelDto();
-
-                aux.setIdLabel(label.getId());
-                aux.setName(label.getName());
-
-                labelsDefault.add(aux);
-            }
-
-            return labelsDefault;
-
-        } else return null;
+        return labels;
     }
 
-    public Label saveNewLabel(NewLabelDto nameLabel, int idUser) {
+    public List<LabelView> findLabelsByUser(int idUser){
 
-        User user = this.userRepository.findByIdAndIsEnabledTrue(idUser);
+        List<LabelView> labels =  this.labelRepository.findByIsEnabledTrueAndUserIdOrUserId(idUser, null);
+
+        return labels;
+    }
+
+    public Label saveNewLabel(NewLabelDto nameLabel, User user) throws LabelException {
 
         Label label = new Label();
 
         label.setName(nameLabel.getName());
         label.setUser(user);
+        label.setEnabled(true);
 
-        return this.labelRepository.save(label);
+        Label newLabel = this.labelRepository.save(label);
+
+        if(newLabel != null) {
+
+            return newLabel;
+        }
+
+        else throw new LabelException("Label Error", "New Label wasn't saved");
 
     }
 
-    public LabelXMessage assignLabelToMessage(int idMessage, int idLabel, int idUser){
+    public LabelXMessage assignLabelToMessage(int idMessage, int idLabel, User user) throws LabelException {
 
         Label label = this.labelRepository.findByIdAndIsEnabledTrue(idLabel);
-
-        User user = this.userRepository.findByIdAndIsEnabledTrue(idUser);
 
         Message message = this.messageRepository.findById(idMessage);
 
@@ -105,7 +76,14 @@ public class LabelXMessageService {
         labelXMessage.setLabel(label);
         labelXMessage.setUser(user);
 
-        return this.labelXMessageRepository.save(labelXMessage);
+        LabelXMessage newLabelXMessage = this.labelXMessageRepository.save(labelXMessage);
+
+        if(newLabelXMessage != null) {
+
+            return newLabelXMessage;
+        }
+
+        else throw new LabelException("Label Error", "Label wasn't assigned to Message");
     }
 
     public Label delete (int idLabel) throws LabelException {
