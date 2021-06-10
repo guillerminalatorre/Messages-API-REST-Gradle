@@ -1,6 +1,8 @@
 package course.springframeworkguru.messagesapirestg.models;
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
+import org.springframework.web.bind.annotation.Mapping;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,26 +14,30 @@ import java.io.Serializable;
 @Builder
 @Entity
 @Table(name = "recipients")
-public class Recipients implements Serializable {
+public class Recipient implements Serializable {
 
     @Id
-    @ManyToOne
+    @Column(name = "id_recipient")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user",
             foreignKey = @ForeignKey(name="FK_USER_RECIPIENT"))
-    @PrimaryKeyJoinColumn(name = "id_user",referencedColumnName="id_user")
+    @JsonIgnoreProperties(value = {"admin"})
     private User user;
 
-    @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_message",
             foreignKey = @ForeignKey(name="FK_MESSAGE_RECIPIENT"))
-    @PrimaryKeyJoinColumn(name = "id_message",referencedColumnName="id_message")
+    @JsonBackReference
     private Message message;
 
-    @Id
-    @ManyToOne
+    @Column(name = "is_deleted_by_recipient", columnDefinition = "boolean default false")
+    private boolean isDeletedByRecipient;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_recipient_type",
             foreignKey = @ForeignKey(name="FK_TYPE_RECIPIENT"))
-    @PrimaryKeyJoinColumn(name = "id_recipient_type",referencedColumnName="id_recipient_type")
     private RecipientType recipientType;
 }

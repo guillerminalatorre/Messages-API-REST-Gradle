@@ -1,4 +1,4 @@
-package course.springframeworkguru.messagesapirestg.models.employeesAPI;
+package course.springframeworkguru.messagesapirestg.models.employees;
 
 import lombok.*;
 
@@ -21,7 +21,7 @@ public class City  implements Serializable {
     @Column( name = "name")
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_state", foreignKey = @ForeignKey(name="FK_STATE_CITY"))
     private State state;
 }

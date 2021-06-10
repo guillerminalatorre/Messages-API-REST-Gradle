@@ -1,4 +1,4 @@
-package course.springframeworkguru.messagesapirestg.models.employeesAPI;
+package course.springframeworkguru.messagesapirestg.models.employees;
 
 import lombok.*;
 
@@ -16,6 +16,7 @@ public class Country  implements Serializable {
 
     @Id
     @Column(name = "id_country")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")

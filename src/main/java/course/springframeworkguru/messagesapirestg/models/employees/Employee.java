@@ -1,4 +1,4 @@
-package course.springframeworkguru.messagesapirestg.models.employeesAPI;
+package course.springframeworkguru.messagesapirestg.models.employees;
 
 import lombok.*;
 
@@ -11,10 +11,13 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @Entity
+@ToString
+@EqualsAndHashCode
 @Table(name = "employees")
 public class Employee  implements Serializable {
     @Id
     @Column(name = "id_employee")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "id_number")
@@ -29,7 +32,7 @@ public class Employee  implements Serializable {
     @Column(name = "mail_username")
     private String mailUsername;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_city", foreignKey = @ForeignKey(name="FK_CITY_EMPLOYEE"))
     private City city;
 }

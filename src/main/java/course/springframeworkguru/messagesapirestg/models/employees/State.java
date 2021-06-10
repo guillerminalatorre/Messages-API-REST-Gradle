@@ -1,4 +1,4 @@
-package course.springframeworkguru.messagesapirestg.models.employeesAPI;
+package course.springframeworkguru.messagesapirestg.models.employees;
 
 import lombok.*;
 
@@ -15,12 +15,13 @@ import java.io.Serializable;
 public class State  implements Serializable {
     @Id
     @Column(name = "id_state")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_country", foreignKey = @ForeignKey(name="FK_COUNTRY_STATE"))
     private Country country;
 }

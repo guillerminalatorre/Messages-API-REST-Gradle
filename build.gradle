@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.4.5'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
 group = 'course.springframeworkguru'
@@ -15,13 +16,105 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-gradle-plugin:2.4.5'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.session:spring-session-core'
+	implementation 'com.h2database:h2'
 	implementation 'org.projectlombok:lombok:1.18.18'
+
+	compileOnly 'org.projectlombok:lombok:1.18.20'
+	annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+	testCompileOnly 'org.projectlombok:lombok:1.18.20'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+	implementation 'org.json:json:20171018'
+	implementation group: 'com.google.code.gson', name: 'gson', version: '2.7'
+
+	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+
+	implementation group: 'junit', name: 'junit', version: '4.13'
+
+	testImplementation 'junit:junit:4.13'
+
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.7.2")/*To run Junit test with 'gradle test' we need these three testRuntimeOnly*/
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
+	testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.7.2")
+
+	implementation group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+
+	implementation group: 'org.jacoco', name: 'jacoco-maven-plugin', version: '0.8.2'
+
+	implementation "org.junit.jupiter:junit-jupiter-engine:5.6.1"
+	implementation "org.junit.jupiter:junit-jupiter-api:5.6.1"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.6.1"
+
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
+	useTestNG()
 	useJUnitPlatform()
+	scanForTestClasses = false
+	reports.junitXml.destination = file("$buildDir/test-results")
+	beforeTest { descriptor ->
+		logger.lifecycle("Running test: " + descriptor)
+	}
+	finalizedBy jacocoTestReport
+}
+
+jacoco {
+	toolVersion = "0.8.5"
+}
+
+jacocoTestReport {
+	reports {
+		html.enabled = true
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: ['**/utils/**',
+										'**/session/**',
+										'**/exceptions/**',
+										'**/config/**',
+										'**/models/**/*',
+										'**/dto/**',
+										'**/views/**'])
+		}))
+	}
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+
+		rule {
+			element = 'BUNDLE'
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.8
+			}
+
+		excludes = ['**/utils/**',
+					'**/session/**',
+					'**/exceptions/**',
+					'**/config/**',
+					'**/models/**/*',
+					'**/dto/**',
+					'**/views/**',
+					'**/repositories/**']
+		}
+	}
+
+}
+
+sourceSets {
+	test {
+		java.srcDir file('src/test/java/**/.java')
+	}
 }
