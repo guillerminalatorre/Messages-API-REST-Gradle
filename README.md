@@ -38,7 +38,7 @@
 - Gradle 7.0.2
 
 ## Installation
-Create local PostgreSQL database and configure src/main/resources/application.properties or use my config. Run to create tables.
+Create local PostgreSQL database and configure src/main/resources/application.properties or use my config. Run to create tables. Load schema/data.sql inserts.
 
 To install dependencies:
 ```sh
@@ -52,12 +52,11 @@ gradlew bootRun
 ## Docker
 
 ```sh
-dockek compose up
+docker compose up
 ```
 
 ## Testing
 ```sh
-cd (repository_location)
 gradlew test
 gradlew jacocoTestCoverageVerification
 ```
