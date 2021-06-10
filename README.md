@@ -9,7 +9,7 @@
 
 ### Profile: Client
 - It's created from an existient Employee.
-- SingIn.
+- SignIn.
 - Login.
 - Logout.
 - Send and recieve messages with another users. 
